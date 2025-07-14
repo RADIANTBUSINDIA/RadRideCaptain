@@ -68,7 +68,7 @@ export default function MapView({ trip, onEndTrip, driverLocation }: MapViewProp
         </Map>
       </APIProvider>
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-        <Button variant="destructive" size="lg" onClick={onEndTrip} className="shadow-lg">End Trip</Button>
+        <Button variant="destructive" size="lg" onClick={onEndTrip} className="shadow-lg animate-pulse">End Trip</Button>
       </div>
     </Card>
   );

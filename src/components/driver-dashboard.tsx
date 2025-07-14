@@ -10,6 +10,7 @@ import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
 import MapView from "./map-view";
 import DriverStats from "./driver-stats";
+import TripInfo from "./trip-info";
 
 export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
@@ -112,6 +113,7 @@ export default function DriverDashboard() {
             id="availability-toggle"
             checked={isAvailable}
             onCheckedChange={handleAvailabilityChange}
+            disabled={!!acceptedTrip}
           />
         </div>
       </header>
@@ -151,7 +153,11 @@ export default function DriverDashboard() {
             )}
         </div>
         <div className="lg:col-span-2 h-full overflow-y-auto">
-              {isClient && <DriverStats tripHistory={tripHistory} />}
+             {acceptedTrip ? (
+                <TripInfo trip={acceptedTrip} onEndTrip={handleEndTrip} />
+             ) : (
+                isClient && <DriverStats tripHistory={tripHistory} />
+             )}
         </div>
       </main>
     </div>
