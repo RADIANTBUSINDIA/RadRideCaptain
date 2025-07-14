@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
@@ -7,32 +8,32 @@ import * as Tone from 'tone';
 const sampleBookings: Omit<BookingRequest, 'id'>[] = [
   {
     customerName: 'Aarav Sharma',
-    pickupLocation: { name: 'Chhatrapati Shivaji Terminus Area, Fort, Mumbai', lat: 18.9401, lng: 72.8355 },
-    destination: { name: 'Bandra West, Mumbai', lat: 19.0596, lng: 72.8295 },
+    pickupLocation: { name: '123, Kalbadevi Road, near Metro Cinema, Marine Lines, Mumbai', lat: 18.9401, lng: 72.8355 },
+    destination: { name: 'Shop No. 5, Hill Road, opposite St. Peters Church, Bandra West, Mumbai', lat: 19.0596, lng: 72.8295 },
     fareEstimate: 350.50,
   },
   {
     customerName: 'Saanvi Gupta',
-    pickupLocation: { name: 'Connaught Place, New Delhi', lat: 28.6330, lng: 77.2193 },
-    destination: { name: 'Hauz Khas Village, New Delhi', lat: 28.5503, lng: 77.1932 },
+    pickupLocation: { name: 'A-Block, Connaught Place, near Rajiv Chowk Metro, New Delhi', lat: 28.6330, lng: 77.2193 },
+    destination: { name: '22, Hauz Khas Village, near Deer Park, New Delhi', lat: 28.5503, lng: 77.1932 },
     fareEstimate: 280.75,
   },
   {
     customerName: 'Vihaan Singh',
-    pickupLocation: { name: 'Koramangala, Bengaluru', lat: 12.9352, lng: 77.6245 },
-    destination: { name: 'Indiranagar, Bengaluru', lat: 12.9719, lng: 77.6411 },
+    pickupLocation: { name: '45, 1st Main, 5th Block, Koramangala, Bengaluru', lat: 12.9352, lng: 77.6245 },
+    destination: { name: '27, 100 Feet Road, HAL 2nd Stage, Indiranagar, Bengaluru', lat: 12.9719, lng: 77.6411 },
     fareEstimate: 180.00,
   },
   {
     customerName: 'Myra Patel',
-    pickupLocation: { name: 'T. Nagar, Chennai', lat: 13.0475, lng: 80.2323 },
-    destination: { name: 'Adyar, Chennai', lat: 13.0064, lng: 80.2572 },
+    pickupLocation: { name: '10, Ranganathan Street, T. Nagar, Chennai', lat: 13.0475, lng: 80.2323 },
+    destination: { name: '33, Besant Avenue Road, Adyar, Chennai', lat: 13.0064, lng: 80.2572 },
     fareEstimate: 210.25,
   },
   {
     customerName: 'Advik Kumar',
-    pickupLocation: { name: 'Howrah Bridge, Kolkata', lat: 22.5852, lng: 88.3458 },
-    destination: { name: 'Park Street, Kolkata', lat: 22.5533, lng: 88.3516 },
+    pickupLocation: { name: 'Strand Road, Fairley Place, B.B.D. Bagh, Kolkata', lat: 22.5852, lng: 88.3458 },
+    destination: { name: '17, Park Street, near Allen Park, Kolkata', lat: 22.5533, lng: 88.3516 },
     fareEstimate: 150.00,
   },
 ];
@@ -120,7 +121,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
 
     if (isAvailable && !bookingRequest && !hasActiveTrip && driverLocation) {
       // Shorten the delay to get more frequent ride requests.
-      const randomDelay = Math.random() * 2000 + 1000; // 1-3 seconds
+      const randomDelay = Math.random() * 1000 + 500; // 0.5-1.5 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
 
