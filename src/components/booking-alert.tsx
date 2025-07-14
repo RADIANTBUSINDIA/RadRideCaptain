@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { User, MapPin, DollarSign, ArrowRight } from "lucide-react";
+import { User, MapPin, ArrowRight } from "lucide-react";
 
 interface BookingAlertProps {
   bookingRequest: BookingRequest;
@@ -53,13 +53,6 @@ export default function BookingAlert({
               <span className="font-medium">To:</span>
               <p>{bookingRequest.destination.name}</p>
             </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <DollarSign className="w-5 h-5 text-yellow-500" />
-            <span className="font-medium">Estimated Fare:</span>
-            <span className="font-bold text-lg text-primary">
-              ${bookingRequest.fareEstimate.toFixed(2)}
-            </span>
           </div>
         </div>
         <DialogFooter className="grid grid-cols-2 gap-4">
