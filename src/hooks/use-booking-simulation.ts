@@ -75,7 +75,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
     };
 
     if (isAvailable && !bookingRequest && !hasActiveTrip) {
-      const randomDelay = Math.random() * 5000 + 3000; // 3-8 seconds
+      const randomDelay = Math.random() * 10000 + 10000; // 10-20 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
 
