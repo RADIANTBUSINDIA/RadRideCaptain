@@ -119,7 +119,8 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
     };
 
     if (isAvailable && !bookingRequest && !hasActiveTrip && driverLocation) {
-      const randomDelay = Math.random() * 15000 + 10000; // 10-25 seconds
+      // Shorten the delay to get more frequent ride requests.
+      const randomDelay = Math.random() * 8000 + 5000; // 5-13 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
 
