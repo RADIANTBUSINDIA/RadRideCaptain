@@ -1,38 +1,48 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import type { BookingRequest, Trip } from '@/lib/types';
+import type { BookingRequest, Trip, Location } from '@/lib/types';
 import * as Tone from 'tone';
 
 const sampleBookings: Omit<BookingRequest, 'id'>[] = [
   {
-    customerName: 'Alice Johnson',
-    pickupLocation: { name: '123 Main St, Anytown, USA', lat: 34.0522, lng: -118.2437 },
-    destination: { name: '456 Oak Ave, Anytown, USA', lat: 34.0622, lng: -118.2537 },
-    fareEstimate: 25.50,
+    customerName: 'Aarav Sharma',
+    pickupLocation: { name: 'Chhatrapati Shivaji Terminus Area, Fort, Mumbai', lat: 18.9401, lng: 72.8355 },
+    destination: { name: 'Bandra West, Mumbai', lat: 19.0596, lng: 72.8295 },
+    fareEstimate: 350.50,
   },
   {
-    customerName: 'Bob Williams',
-    pickupLocation: { name: '789 Pine Ln, Anytown, USA', lat: 34.0422, lng: -118.2637 },
-    destination: { name: '101 Maple Dr, Anytown, USA', lat: 34.0552, lng: -118.2337 },
-    fareEstimate: 18.75,
+    customerName: 'Saanvi Gupta',
+    pickupLocation: { name: 'Connaught Place, New Delhi', lat: 28.6330, lng: 77.2193 },
+    destination: { name: 'Hauz Khas Village, New Delhi', lat: 28.5503, lng: 77.1932 },
+    fareEstimate: 280.75,
   },
   {
-    customerName: 'Charlie Brown',
-    pickupLocation: { name: '222 Elm St, Metro City', lat: 34.0722, lng: -118.2437 },
-    destination: { name: '333 Birch Rd, Metro City', lat: 34.0822, lng: -118.2587 },
-    fareEstimate: 32.00,
+    customerName: 'Vihaan Singh',
+    pickupLocation: { name: 'Koramangala, Bengaluru', lat: 12.9352, lng: 77.6245 },
+    destination: { name: 'Indiranagar, Bengaluru', lat: 12.9719, lng: 77.6411 },
+    fareEstimate: 180.00,
+  },
+  {
+    customerName: 'Myra Patel',
+    pickupLocation: { name: 'T. Nagar, Chennai', lat: 13.0475, lng: 80.2323 },
+    destination: { name: 'Adyar, Chennai', lat: 13.0064, lng: 80.2572 },
+    fareEstimate: 210.25,
+  },
+  {
+    customerName: 'Advik Kumar',
+    pickupLocation: { name: 'Howrah Bridge, Kolkata', lat: 22.5852, lng: 88.3458 },
+    destination: { name: 'Park Street, Kolkata', lat: 22.5533, lng: 88.3516 },
+    fareEstimate: 150.00,
   },
 ];
 
 const sampleHistory: Omit<Trip, 'id' | 'customerName' | 'pickupLocation' | 'destination' | 'fareEstimate'>[] = [
-    { status: 'completed', finalFare: 28.00, tip: 5.00, timestamp: '2023-10-27T10:00:00Z' },
-    { status: 'completed', finalFare: 20.50, tip: 3.00, timestamp: '2023-10-27T11:30:00Z' },
+    { status: 'completed', finalFare: 380.00, tip: 50.00, timestamp: '2023-10-27T10:00:00Z' },
+    { status: 'completed', finalFare: 300.50, tip: 30.00, timestamp: '2023-10-27T11:30:00Z' },
     { status: 'rejected', finalFare: 0, tip: 0, timestamp: '2023-10-27T12:00:00Z' },
-    { status: 'completed', finalFare: 35.00, tip: 7.50, timestamp: '2023-10-27T14:00:00Z' },
-    { status: 'completed', finalFare: 15.25, tip: 2.00, timestamp: '2023-10-27T15:15:00Z' },
-    { status: 'rejected', finalFare: 0, tip: 0, timestamp: '2023-10-27T16:00:00Z' },
-    { status: 'completed', finalFare: 42.75, tip: 10.00, timestamp: '2023-10-27T17:45:00Z' },
+    { status: 'completed', finalFare: 200.00, tip: 25.00, timestamp: '2023-10-27T14:00:00Z' },
+    { status: 'completed', finalFare: 225.25, tip: 20.00, timestamp: '2023-10-27T15:15:00Z' },
 ];
 
 export function generatePastTrips(): Trip[] {
@@ -46,8 +56,27 @@ export function generatePastTrips(): Trip[] {
     })
 }
 
+// Haversine formula to calculate distance between two lat/lng points
+function getDistanceInKm(loc1: Location, loc2: Location) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(loc2.lat - loc1.lat);
+    const dLon = deg2rad(loc2.lng - loc1.lng);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(loc1.lat)) * Math.cos(deg2rad(loc2.lat)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        ;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+}
 
-export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolean) {
+function deg2rad(deg: number) {
+    return deg * (Math.PI / 180)
+}
+
+
+export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolean, driverLocation: Location | null) {
   const [bookingRequest, setBookingRequest] = useState<BookingRequest | null>(null);
 
   const clearBooking = useCallback(() => {
@@ -58,12 +87,27 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
     let timer: NodeJS.Timeout;
 
     const createNewBooking = async () => {
-      const randomBooking = sampleBookings[Math.floor(Math.random() * sampleBookings.length)];
+        if (!driverLocation) return;
+
+        const potentialBookings = sampleBookings.filter(booking => {
+            const pickupDistance = getDistanceInKm(driverLocation, booking.pickupLocation);
+            const tripDistance = getDistanceInKm(booking.pickupLocation, booking.destination);
+            // Ride is valid if pickup is within 20km and total trip is less than 50km
+            return pickupDistance < 20 && tripDistance < 50;
+        });
+
+        if (potentialBookings.length === 0) {
+            // No suitable rides found, try again later
+            const randomDelay = Math.random() * 5000 + 5000; // 5-10 seconds
+            timer = setTimeout(createNewBooking, randomDelay);
+            return;
+        }
+
+      const randomBooking = potentialBookings[Math.floor(Math.random() * potentialBookings.length)];
       setBookingRequest({
         ...randomBooking,
         id: new Date().toISOString(),
       });
-      // Play sound after user interaction context is established
       try {
         await Tone.start();
         const synth = new Tone.Synth().toDestination();
@@ -74,15 +118,15 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
       }
     };
 
-    if (isAvailable && !bookingRequest && !hasActiveTrip) {
-      const randomDelay = Math.random() * 10000 + 10000; // 10-20 seconds
+    if (isAvailable && !bookingRequest && !hasActiveTrip && driverLocation) {
+      const randomDelay = Math.random() * 15000 + 10000; // 10-25 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
 
     return () => {
       clearTimeout(timer);
     };
-  }, [isAvailable, bookingRequest, hasActiveTrip]);
+  }, [isAvailable, bookingRequest, hasActiveTrip, driverLocation]);
 
   return { bookingRequest, clearBooking };
 }

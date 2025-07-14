@@ -76,7 +76,7 @@
 
 @layer utilities {
   .animate-pulse-glow {
-    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   @keyframes pulse-glow {
@@ -84,9 +84,9 @@
       opacity: 1;
       box-shadow: 0 0 0 0 hsl(var(--accent) / 0.7);
     }
-    50% {
+    70% {
       opacity: 1;
-      box-shadow: 0 0 0 1rem hsl(var(--accent) / 0);
+      box-shadow: 0 0 0 0.5rem hsl(var(--accent) / 0);
     }
   }
 }

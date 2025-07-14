@@ -9,22 +9,48 @@ import { useBookingSimulation, generatePastTrips } from "@/hooks/use-booking-sim
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
 import MapView from "./map-view";
-import RouteOptimizer from "./route-optimizer";
 import DriverStats from "./driver-stats";
 
 export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
-  const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
+  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          setCurrentLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+          // As a fallback, use a default location if geolocation fails
+          if (!currentLocation) {
+            setCurrentLocation({ lat: 19.0760, lng: 72.8777 }); // Mumbai
+          }
+        },
+        { enableHighAccuracy: true }
+      );
+      return () => navigator.geolocation.clearWatch(watchId);
+    } else {
+        // Fallback for browsers without geolocation support
+        if (!currentLocation) {
+            setCurrentLocation({ lat: 19.0760, lng: 72.8777 }); // Mumbai
+        }
+    }
+  }, [currentLocation]);
+
+  const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Ensure this runs only on the client
     setIsClient(true);
     setTripHistory(generatePastTrips());
   }, []);
-
 
   const handleAccept = () => {
     if (bookingRequest) {
@@ -61,9 +87,9 @@ export default function DriverDashboard() {
         ...acceptedTrip,
         status: 'completed',
         // In a real app, fare would be calculated
-        finalFare: acceptedTrip.fareEstimate, 
+        finalFare: acceptedTrip.fareEstimate,
         // Tip would be added by the user
-        tip: Math.floor(Math.random() * (acceptedTrip.fareEstimate * 0.25)), 
+        tip: Math.floor(Math.random() * (acceptedTrip.fareEstimate * 0.25)),
         timestamp: new Date().toISOString(),
       };
       setTripHistory(prev => [completedTrip, ...prev]);
@@ -101,15 +127,7 @@ export default function DriverDashboard() {
         
         <div className="lg:col-span-3 flex flex-col gap-6 h-full">
             {acceptedTrip ? (
-                <>
-                    <div className="flex-[3]">
-                        <MapView trip={acceptedTrip} />
-                    </div>
-                    <div className="flex-1 lg:hidden">
-                        <RouteOptimizer trip={acceptedTrip} onEndTrip={handleEndTrip}/>
-                    </div>
-                </>
-
+                <MapView trip={acceptedTrip} onEndTrip={handleEndTrip} driverLocation={currentLocation} />
             ) : (
                 <Card className="h-full flex items-center justify-center">
                     <CardContent className="p-0">
@@ -133,13 +151,7 @@ export default function DriverDashboard() {
             )}
         </div>
         <div className="lg:col-span-2 h-full overflow-y-auto">
-             {acceptedTrip ? (
-                <div className="hidden lg:block h-full">
-                    <RouteOptimizer trip={acceptedTrip} onEndTrip={handleEndTrip}/>
-                </div>
-            ) : (
-              isClient && <DriverStats tripHistory={tripHistory} />
-            )}
+              {isClient && <DriverStats tripHistory={tripHistory} />}
         </div>
       </main>
     </div>
