@@ -1,9 +1,11 @@
+
 "use client";
 
 import type { BookingRequest } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { User, MapPin } from "lucide-react";
+import { User, MapPin, Navigation } from "lucide-react";
+import Link from "next/link";
 
 interface TripInfoProps {
   trip: BookingRequest;
@@ -11,11 +13,23 @@ interface TripInfoProps {
 }
 
 export default function TripInfo({ trip, onEndTrip }: TripInfoProps) {
+
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${trip.pickupLocation.lat},${trip.pickupLocation.lng}&destination=${trip.destination.lat},${trip.destination.lng}&travelmode=driving`;
+
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Current Trip</CardTitle>
-        <CardDescription>Active trip details.</CardDescription>
+        <div className="flex justify-between items-center">
+            <div>
+                <CardTitle>Current Trip</CardTitle>
+                <CardDescription>Active trip details.</CardDescription>
+            </div>
+            <Button asChild variant="outline" size="icon">
+                <Link href={googleMapsUrl} target="_blank" rel="noopener noreferrer">
+                    <Navigation className="h-4 w-4" />
+                </Link>
+            </Button>
+        </div>
       </CardHeader>
       <CardContent className="flex-1 space-y-4 overflow-y-auto">
         <div className="space-y-2 p-3 border rounded-lg bg-card">
