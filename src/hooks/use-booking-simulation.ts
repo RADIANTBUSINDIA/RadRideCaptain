@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import type { BookingRequest } from '@/lib/types';
+import type { BookingRequest, Trip } from '@/lib/types';
 import * as Tone from 'tone';
 
 const sampleBookings: Omit<BookingRequest, 'id'>[] = [
@@ -25,7 +25,29 @@ const sampleBookings: Omit<BookingRequest, 'id'>[] = [
   },
 ];
 
-export function useBookingSimulation(isAvailable: boolean) {
+const sampleHistory: Omit<Trip, 'id' | 'customerName' | 'pickupLocation' | 'destination' | 'fareEstimate'>[] = [
+    { status: 'completed', finalFare: 28.00, tip: 5.00, timestamp: '2023-10-27T10:00:00Z' },
+    { status: 'completed', finalFare: 20.50, tip: 3.00, timestamp: '2023-10-27T11:30:00Z' },
+    { status: 'rejected', finalFare: 0, tip: 0, timestamp: '2023-10-27T12:00:00Z' },
+    { status: 'completed', finalFare: 35.00, tip: 7.50, timestamp: '2023-10-27T14:00:00Z' },
+    { status: 'completed', finalFare: 15.25, tip: 2.00, timestamp: '2023-10-27T15:15:00Z' },
+    { status: 'rejected', finalFare: 0, tip: 0, timestamp: '2023-10-27T16:00:00Z' },
+    { status: 'completed', finalFare: 42.75, tip: 10.00, timestamp: '2023-10-27T17:45:00Z' },
+];
+
+export function generatePastTrips(): Trip[] {
+    return sampleHistory.map((historyItem, index) => {
+        const booking = sampleBookings[index % sampleBookings.length];
+        return {
+            ...booking,
+            ...historyItem,
+            id: new Date(historyItem.timestamp).toISOString() + Math.random(),
+        }
+    })
+}
+
+
+export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolean) {
   const [bookingRequest, setBookingRequest] = useState<BookingRequest | null>(null);
 
   const clearBooking = useCallback(() => {
@@ -52,7 +74,7 @@ export function useBookingSimulation(isAvailable: boolean) {
       }
     };
 
-    if (isAvailable && !bookingRequest) {
+    if (isAvailable && !bookingRequest && !hasActiveTrip) {
       const randomDelay = Math.random() * 5000 + 3000; // 3-8 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
@@ -60,7 +82,7 @@ export function useBookingSimulation(isAvailable: boolean) {
     return () => {
       clearTimeout(timer);
     };
-  }, [isAvailable, bookingRequest]);
+  }, [isAvailable, bookingRequest, hasActiveTrip]);
 
   return { bookingRequest, clearBooking };
 }

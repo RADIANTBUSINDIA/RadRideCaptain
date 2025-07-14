@@ -56,14 +56,14 @@ export default function RouteOptimizer({ trip, onEndTrip }: RouteOptimizerProps)
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Trip Details</CardTitle>
-        <CardDescription>Current trip information and AI route optimization.</CardDescription>
+        <CardTitle>Current Trip</CardTitle>
+        <CardDescription>Active trip details and AI route optimization.</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 space-y-4">
+      <CardContent className="flex-1 space-y-4 overflow-y-auto">
         <div className="space-y-2 p-3 border rounded-lg">
           <div className="flex items-center gap-2 font-semibold"><User className="w-4 h-4 text-primary" /> Customer</div>
           <p className="pl-6 text-sm">{trip.customerName}</p>
-          <div className="flex items-center gap-2 font-semibold"><MapPin className="w-4 h-4 text-primary" /> Pickup</div>
+          <div className="flex items-center gap-2 font-semibold"><MapPin className="w-4 h-4 text-green-500" /> Pickup</div>
           <p className="pl-6 text-sm">{trip.pickupLocation.name}</p>
           <div className="flex items-center gap-2 font-semibold"><MapPin className="w-4 h-4 text-red-500" /> Destination</div>
           <p className="pl-6 text-sm">{trip.destination.name}</p>
