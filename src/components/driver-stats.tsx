@@ -4,14 +4,26 @@ import type { Trip } from "@/lib/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BarChart, BadgeDollarSign, History, TrendingUp, TrendingDown, Award } from "lucide-react";
+import { BarChart as BarChartIcon, BadgeDollarSign, History, TrendingUp, TrendingDown, Award } from "lucide-react";
 import { format } from "date-fns";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 
 interface DriverStatsProps {
   tripHistory: Trip[];
 }
+
+const chartConfig = {
+  accepted: {
+    label: "Accepted",
+    color: "hsl(var(--primary))",
+  },
+  rejected: {
+    label: "Rejected",
+    color: "hsl(var(--destructive))",
+  },
+} satisfies ChartConfig;
+
 
 export default function DriverStats({ tripHistory }: DriverStatsProps) {
   const completedTrips = tripHistory.filter(t => t.status === 'completed');
@@ -38,7 +50,7 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="history"><History className="w-4 h-4 mr-1" /> History</TabsTrigger>
             <TabsTrigger value="earnings"><BadgeDollarSign className="w-4 h-4 mr-1"/> Earnings</TabsTrigger>
-            <TabsTrigger value="performance"><BarChart className="w-4 h-4 mr-1"/> Performance</TabsTrigger>
+            <TabsTrigger value="performance"><BarChartIcon className="w-4 h-4 mr-1"/> Performance</TabsTrigger>
           </TabsList>
           
           <TabsContent value="history" className="flex-1 mt-4 overflow-hidden">
@@ -119,16 +131,18 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                     </Card>
                 </div>
                 <div className="h-48">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={performanceData} layout="vertical" margin={{ left: 10 }}>
-                            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                            <XAxis type="number" hide />
-                            <YAxis type="category" dataKey="name" hide />
-                            <ChartTooltip cursor={{fill: 'hsl(var(--muted))'}} content={<ChartTooltipContent />} />
-                            <Bar dataKey="accepted" stackId="a" fill="hsl(var(--primary))" radius={[4, 4, 4, 4]} name="Accepted"/>
-                            <Bar dataKey="rejected" stackId="a" fill="hsl(var(--destructive))" radius={[4, 4, 4, 4]} name="Rejected"/>
-                        </BarChart>
-                    </ResponsiveContainer>
+                    <ChartContainer config={chartConfig} className="w-full h-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={performanceData} layout="vertical" margin={{ left: 10 }}>
+                                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                                <XAxis type="number" hide />
+                                <YAxis type="category" dataKey="name" hide />
+                                <ChartTooltip cursor={{fill: 'hsl(var(--muted))'}} content={<ChartTooltipContent />} />
+                                <Bar dataKey="accepted" stackId="a" fill="var(--color-accepted)" radius={[4, 4, 4, 4]} name="Accepted"/>
+                                <Bar dataKey="rejected" stackId="a" fill="var(--color-rejected)" radius={[4, 4, 4, 4]} name="Rejected"/>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </ChartContainer>
                 </div>
             </div>
           </TabsContent>
