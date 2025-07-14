@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,7 +16,15 @@ export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
-  const [tripHistory, setTripHistory] = useState<Trip[]>(() => generatePastTrips());
+  const [tripHistory, setTripHistory] = useState<Trip[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // Ensure this runs only on the client
+    setIsClient(true);
+    setTripHistory(generatePastTrips());
+  }, []);
+
 
   const handleAccept = () => {
     if (bookingRequest) {
@@ -130,7 +138,7 @@ export default function DriverDashboard() {
                     <RouteOptimizer trip={acceptedTrip} onEndTrip={handleEndTrip}/>
                 </div>
             ) : (
-                <DriverStats tripHistory={tripHistory} />
+              isClient && <DriverStats tripHistory={tripHistory} />
             )}
         </div>
       </main>
