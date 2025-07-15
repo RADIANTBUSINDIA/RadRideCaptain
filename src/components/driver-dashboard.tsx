@@ -30,7 +30,7 @@ export default function DriverDashboard() {
           console.error("Error getting user location:", error);
           // As a fallback, use a default location if geolocation fails
           if (!currentLocation) {
-            setCurrentLocation({ lat: 19.0760, lng: 72.8777 }); // Mumbai
+            setCurrentLocation({ lat: 12.9299, lng: 77.5815 }); // Jayanagar, Bengaluru
           }
         },
         { enableHighAccuracy: true }
@@ -39,7 +39,7 @@ export default function DriverDashboard() {
     } else {
         // Fallback for browsers without geolocation support
         if (!currentLocation) {
-            setCurrentLocation({ lat: 19.0760, lng: 72.8777 }); // Mumbai
+            setCurrentLocation({ lat: 12.9299, lng: 77.5815 }); // Jayanagar, Bengaluru
         }
     }
   }, [currentLocation]);
@@ -103,7 +103,7 @@ export default function DriverDashboard() {
       <header className="flex items-center justify-between p-4 border-b bg-card">
         <div className="flex items-center gap-2">
           <Car className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-bold">DriverSidekick</h1>
+          <h1 className="text-2xl font-bold">Rad Captian</h1>
         </div>
         <div className="flex items-center space-x-2">
           <Label htmlFor="availability-toggle" className={isAvailable ? "text-primary font-semibold" : ""}>

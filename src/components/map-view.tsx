@@ -41,7 +41,7 @@ export default function MapView({ trip, onEndTrip, driverLocation }: MapViewProp
         <Map
           center={center}
           zoom={12}
-          mapId="driversidekick-map"
+          mapId="radcaptian-map"
           className="w-full h-full"
           gestureHandling={'greedy'}
           disableDefaultUI={true}
