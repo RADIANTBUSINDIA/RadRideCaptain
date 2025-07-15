@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress";
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    role: "",
+    role: "Driver", // Default to Driver
     phone: "",
     otp: "",
     name: "",
@@ -43,7 +43,7 @@ export default function OnboardingPage() {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <WelcomeStep onNext={nextStep} updateFormData={updateFormData} />;
+        return <WelcomeStep onNext={nextStep} />;
       case 2:
         return (
           <PhoneVerificationStep
@@ -90,9 +90,17 @@ export default function OnboardingPage() {
       case 7:
         return <FinalStatusStep />;
       default:
-        return <WelcomeStep onNext={nextStep} updateFormData={updateFormData} />;
+        return <WelcomeStep onNext={nextStep} />;
     }
   };
+
+  if (step === 1) {
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+            <WelcomeStep onNext={nextStep} />
+        </div>
+    )
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
