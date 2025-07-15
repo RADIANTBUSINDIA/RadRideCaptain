@@ -33,7 +33,7 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
   const totalFare = completedTrips.reduce((sum, trip) => sum + trip.finalFare, 0);
   const totalTips = completedTrips.reduce((sum, trip) => sum + trip.tip, 0);
   // Using a mock incentive value
-  const incentives = completedTrips.length * 2.5; 
+  const incentives = completedTrips.length * 20; 
 
   const performanceData = [
     { name: 'Rides', accepted: completedTrips.length, rejected: rejectedTrips.length },
@@ -61,7 +61,7 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                     <div className="flex justify-between items-center">
                       <span className="font-semibold">{trip.customerName}</span>
                       {trip.status === 'completed' ? (
-                        <span className="text-sm font-bold text-green-500">${(trip.finalFare + trip.tip).toFixed(2)}</span>
+                        <span className="text-sm font-bold text-green-500">₹{(trip.finalFare + trip.tip).toFixed(2)}</span>
                       ) : (
                         <span className="text-sm font-semibold text-red-500">Rejected</span>
                       )}
@@ -69,7 +69,7 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                     <p className="text-xs text-muted-foreground truncate">{trip.pickupLocation.name} to {trip.destination.name}</p>
                     <p className="text-xs text-muted-foreground">{format(new Date(trip.timestamp), "MMM d, yyyy 'at' h:mm a")}</p>
                      {trip.status === 'completed' && trip.tip > 0 && (
-                        <p className="text-xs text-amber-500 font-medium mt-1">Includes ${trip.tip.toFixed(2)} tip</p>
+                        <p className="text-xs text-amber-500 font-medium mt-1">Includes ₹{trip.tip.toFixed(2)} tip</p>
                     )}
                   </div>
                 ))}
@@ -81,7 +81,7 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
             <div className="space-y-4">
                 <Card>
                     <CardHeader className="p-4">
-                        <CardTitle className="text-center text-3xl font-bold text-primary">${totalEarnings.toFixed(2)}</CardTitle>
+                        <CardTitle className="text-center text-3xl font-bold text-primary">₹{totalEarnings.toFixed(2)}</CardTitle>
                         <CardDescription className="text-center">Total Earnings</CardDescription>
                     </CardHeader>
                 </Card>
@@ -89,19 +89,19 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                     <Card>
                         <CardHeader className="p-3">
                             <CardDescription>Total Fares</CardDescription>
-                            <CardTitle>${totalFare.toFixed(2)}</CardTitle>
+                            <CardTitle>₹{totalFare.toFixed(2)}</CardTitle>
                         </CardHeader>
                     </Card>
                     <Card>
                         <CardHeader className="p-3">
                             <CardDescription>Total Tips</CardDescription>
-                            <CardTitle>${totalTips.toFixed(2)}</CardTitle>
+                            <CardTitle>₹{totalTips.toFixed(2)}</CardTitle>
                         </CardHeader>
                     </Card>
                     <Card>
                         <CardHeader className="p-3">
                             <CardDescription>Incentives</CardDescription>
-                            <CardTitle className="text-green-500">+ ${incentives.toFixed(2)}</CardTitle>
+                            <CardTitle className="text-green-500">+ ₹{incentives.toFixed(2)}</CardTitle>
                         </CardHeader>
                     </Card>
                      <Card>

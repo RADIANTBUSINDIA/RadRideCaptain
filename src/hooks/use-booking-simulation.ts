@@ -8,32 +8,32 @@ import * as Tone from 'tone';
 const sampleBookings: Omit<BookingRequest, 'id'>[] = [
   {
     customerName: 'Aarav Sharma',
-    pickupLocation: { name: '123, Kalbadevi Road, near Metro Cinema, Marine Lines, Mumbai', lat: 18.9401, lng: 72.8355 },
-    destination: { name: 'Shop No. 5, Hill Road, opposite St. Peters Church, Bandra West, Mumbai', lat: 19.0596, lng: 72.8295 },
+    pickupLocation: { name: 'Powerdbooks, Jayanagar 4th Block, Bengaluru', lat: 12.9299, lng: 77.5815 },
+    destination: { name: 'Lalbagh Botanical Garden, Mavalli, Bengaluru', lat: 12.9507, lng: 77.5848 },
     fareEstimate: 350.50,
   },
   {
     customerName: 'Saanvi Gupta',
-    pickupLocation: { name: 'A-Block, Connaught Place, near Rajiv Chowk Metro, New Delhi', lat: 28.6330, lng: 77.2193 },
-    destination: { name: '22, Hauz Khas Village, near Deer Park, New Delhi', lat: 28.5503, lng: 77.1932 },
+    pickupLocation: { name: 'Select CITYWALK, Saket District Centre, New Delhi', lat: 28.5284, lng: 77.2190 },
+    destination: { name: 'Qutub Minar, Mehrauli, New Delhi', lat: 28.5245, lng: 77.1855 },
     fareEstimate: 280.75,
   },
   {
     customerName: 'Vihaan Singh',
-    pickupLocation: { name: '45, 1st Main, 5th Block, Koramangala, Bengaluru', lat: 12.9352, lng: 77.6245 },
-    destination: { name: '27, 100 Feet Road, HAL 2nd Stage, Indiranagar, Bengaluru', lat: 12.9719, lng: 77.6411 },
+    pickupLocation: { name: 'Nexus Mall, 6th Block, Koramangala, Bengaluru', lat: 12.9345, lng: 77.6370 },
+    destination: { name: 'UB City, Vittal Mallya Road, Bengaluru', lat: 12.9721, lng: 77.5946 },
     fareEstimate: 180.00,
   },
   {
     customerName: 'Myra Patel',
-    pickupLocation: { name: '10, Ranganathan Street, T. Nagar, Chennai', lat: 13.0475, lng: 80.2323 },
-    destination: { name: '33, Besant Avenue Road, Adyar, Chennai', lat: 13.0064, lng: 80.2572 },
+    pickupLocation: { name: 'Express Avenue, Royapettah, Chennai', lat: 13.0594, lng: 80.2635 },
+    destination: { name: 'Marina Beach, Triplicane, Chennai', lat: 13.0505, lng: 80.2825 },
     fareEstimate: 210.25,
   },
   {
     customerName: 'Advik Kumar',
-    pickupLocation: { name: 'Strand Road, Fairley Place, B.B.D. Bagh, Kolkata', lat: 22.5852, lng: 88.3458 },
-    destination: { name: '17, Park Street, near Allen Park, Kolkata', lat: 22.5533, lng: 88.3516 },
+    pickupLocation: { name: 'Howrah Bridge, Jagannath Ghat, Kolkata', lat: 22.5852, lng: 88.3458 },
+    destination: { name: 'Victoria Memorial, Queens Way, Kolkata', lat: 22.5448, lng: 88.3426 },
     fareEstimate: 150.00,
   },
 ];
