@@ -21,7 +21,7 @@ interface WelcomeStepProps {
 const welcomeSlides = [
   {
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "https://images.unsplash.com/photo-1570369219895-31a80b572242?q=80&w=600&h=400&fit=crop",
       alt: "A modern car driving through a well-lit city tunnel at night.",
       hint: "car city",
     },
@@ -30,7 +30,7 @@ const welcomeSlides = [
   },
   {
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "https://images.unsplash.com/photo-1593672715438-d88a70629b59?q=80&w=600&h=400&fit=crop",
       alt: "A smiling person holding cash, representing earnings.",
       hint: "person earnings",
     },
@@ -39,7 +39,7 @@ const welcomeSlides = [
   },
   {
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "https://images.unsplash.com/photo-1526772810414-358aa268b815?q=80&w=600&h=400&fit=crop",
       alt: "A smartphone displaying a map with a route, symbolizing smart tools.",
       hint: "phone map",
     },
