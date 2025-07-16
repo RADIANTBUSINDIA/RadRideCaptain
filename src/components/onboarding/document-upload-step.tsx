@@ -21,10 +21,15 @@ export default function DocumentUploadStep({ onNext, onBack, updateFormData }: D
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files: inputFiles } = e.target;
-    if (inputFiles) {
-        setFiles(prev => ({...prev, [name]: inputFiles[0]}));
-        updateFormData({ [name]: inputFiles[0] });
+    if (inputFiles && inputFiles.length > 0) {
+        const file = inputFiles[0];
+        setFiles(prev => ({...prev, [name]: file as any}));
+        updateFormData({ [name]: file });
     }
+  };
+
+  const isFormValid = () => {
+    return files.licenseFile && files.aadharFile && files.policeVerificationFile;
   };
 
   return (
@@ -61,7 +66,7 @@ export default function DocumentUploadStep({ onNext, onBack, updateFormData }: D
       
       <div className="mt-8 flex justify-between">
         <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button onClick={onNext} className="bg-accent hover:bg-accent/90">Review & Submit</Button>
+        <Button onClick={onNext} disabled={!isFormValid()} className="bg-accent hover:bg-accent/90">Review & Submit</Button>
       </div>
     </div>
   );

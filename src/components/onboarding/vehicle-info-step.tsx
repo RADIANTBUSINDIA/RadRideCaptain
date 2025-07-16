@@ -18,7 +18,7 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
-    if (files) {
+    if (files && files.length > 0) {
       updateFormData({ [name]: files[0] });
     } else {
       updateFormData({ [name]: value });
@@ -27,6 +27,16 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
 
   const handleSelectChange = (name: string, value: string) => {
     updateFormData({ [name]: value });
+  };
+
+  const isFormValid = () => {
+    return (
+        formData.vehicleType.trim() !== "" &&
+        formData.vehicleModel.trim() !== "" &&
+        formData.vehicleColor.trim() !== "" &&
+        formData.vehicleNumber.trim() !== "" &&
+        formData.rcFile !== null
+    );
   };
 
 
@@ -80,7 +90,7 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
       
       <div className="mt-8 flex justify-between">
         <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button onClick={onNext} className="bg-accent hover:bg-accent/90">Next Step</Button>
+        <Button onClick={onNext} disabled={!isFormValid()} className="bg-accent hover:bg-accent/90">Next Step</Button>
       </div>
     </div>
   );

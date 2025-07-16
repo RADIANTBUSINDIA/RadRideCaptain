@@ -29,6 +29,16 @@ export default function BasicInfoStep({ onNext, onBack, updateFormData, formData
     updateFormData({ gender: value });
   };
 
+  const isFormValid = () => {
+    return (
+      formData.name.trim() !== "" &&
+      formData.email.trim() !== "" &&
+      /\S+@\S+\.\S+/.test(formData.email) &&
+      formData.gender !== "" &&
+      formData.address.trim() !== ""
+    );
+  };
+
 
   return (
     <div>
@@ -77,7 +87,7 @@ export default function BasicInfoStep({ onNext, onBack, updateFormData, formData
       
       <div className="mt-8 flex justify-between">
         <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button onClick={onNext} className="bg-accent hover:bg-accent/90">Next Step</Button>
+        <Button onClick={onNext} disabled={!isFormValid()} className="bg-accent hover:bg-accent/90">Next Step</Button>
       </div>
     </div>
   );

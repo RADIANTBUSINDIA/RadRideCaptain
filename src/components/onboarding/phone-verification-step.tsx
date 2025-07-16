@@ -44,10 +44,11 @@ export default function PhoneVerificationStep({ onNext, onBack, updateFormData, 
               type="tel"
               placeholder="Enter your 10-digit phone number"
               value={localPhone}
-              onChange={(e) => setLocalPhone(e.target.value)}
+              onChange={(e) => setLocalPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+              maxLength={10}
             />
           </div>
-          <Button onClick={handleSendOtp} className="w-full bg-accent hover:bg-accent/90">Send OTP</Button>
+          <Button onClick={handleSendOtp} disabled={localPhone.length !== 10} className="w-full bg-accent hover:bg-accent/90">Send OTP</Button>
         </div>
       ) : (
         <div className="space-y-4">
@@ -58,11 +59,12 @@ export default function PhoneVerificationStep({ onNext, onBack, updateFormData, 
               type="text"
               placeholder="Enter the 4-digit OTP"
               value={otp}
-              onChange={(e) => setOtp(e.target.value)}
+              onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
+              maxLength={4}
             />
              <p className="text-xs text-muted-foreground text-center pt-2">For simulation, you can enter any 4 digits.</p>
           </div>
-          <Button onClick={handleVerifyOtp} className="w-full bg-accent hover:bg-accent/90">Verify & Continue</Button>
+          <Button onClick={handleVerifyOtp} disabled={otp.length !== 4} className="w-full bg-accent hover:bg-accent/90">Verify & Continue</Button>
         </div>
       )}
 
