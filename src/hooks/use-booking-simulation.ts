@@ -12,6 +12,14 @@ const indianCustomerNames = [
   "Pari Reddy", "Myra Joshi", "Anika Nair", "Kiara Mehta", "Sia Iyer"
 ];
 
+const dubaiLocations = [
+    "Burj Khalifa", "The Dubai Mall", "Dubai Marina", "Palm Jumeirah", "Jumeirah Beach Residence (JBR)",
+    "Downtown Dubai", "Business Bay", "Deira City Centre", "Mall of the Emirates", "Dubai International Airport (DXB)",
+    "Al Karama", "Jumeirah Lakes Towers (JLT)", "Dubai Creek", "The Walk at JBR", "La Mer", "City Walk",
+    "Dubai Frame", "Global Village", "Miracle Garden", "Kite Beach"
+];
+
+
 // Generates a random coordinate within a certain radius (in km) from a center point
 function generateRandomPoint(center: Location, radius: number): Location {
     const y0 = center.lat;
@@ -31,8 +39,10 @@ function generateRandomPoint(center: Location, radius: number): Location {
     // Adjust the x-coordinate for the shrinking of the east-west distances
     const new_x = x / Math.cos(y0 * Math.PI / 180);
 
+    const randomLocationName = dubaiLocations[Math.floor(Math.random() * dubaiLocations.length)];
+
     return {
-        name: "Random Location", // This could be reverse-geocoded in a real app
+        name: randomLocationName,
         lat: y + y0,
         lng: new_x + x0,
     };
@@ -53,15 +63,17 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
       // Use the current location if available, otherwise default to a location in Dubai
       const baseLocation = currentLocation || { name: "Dubai, UAE", lat: 25.2048, lng: 55.2708 };
       
-      const pickupLocation = generateRandomPoint(baseLocation, 1); // within 1km for pickup
-      pickupLocation.name = "Nearby Pickup";
+      let pickupLocation, destination;
+      
+      do {
+        pickupLocation = generateRandomPoint(baseLocation, 1);
+        destination = generateRandomPoint(pickupLocation, 50);
+      } while (pickupLocation.name === destination.name); // Ensure pickup and destination are not the same place
 
-      const destination = generateRandomPoint(pickupLocation, 50); // within 50km for drop-off
-      destination.name = "Destination";
 
       const randomCustomerName = indianCustomerNames[Math.floor(Math.random() * indianCustomerNames.length)];
 
-      // Estimate fare based on a simple distance calculation (e.g., 50 AED per km)
+      // Estimate fare based on a simple distance calculation
       const distance = getDistanceInKm(pickupLocation, destination);
       const fareEstimate = 50 + (distance * 15); // Base fare + per km charge
 
