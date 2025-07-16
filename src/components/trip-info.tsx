@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { User, MapPin, Navigation } from "lucide-react";
 import Link from "next/link";
+import RouteOptimizer from "./route-optimizer";
 
 interface TripInfoProps {
   trip: BookingRequest;
@@ -19,7 +20,7 @@ export default function TripInfo({ trip, onEndTrip }: TripInfoProps) {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-start">
             <div>
                 <CardTitle>Current Trip</CardTitle>
                 <CardDescription>Active trip details.</CardDescription>
@@ -27,6 +28,7 @@ export default function TripInfo({ trip, onEndTrip }: TripInfoProps) {
             <Button asChild variant="outline" size="icon">
                 <Link href={googleMapsUrl} target="_blank" rel="noopener noreferrer">
                     <Navigation className="h-4 w-4" />
+                    <span className="sr-only">Navigate</span>
                 </Link>
             </Button>
         </div>
@@ -52,7 +54,8 @@ export default function TripInfo({ trip, onEndTrip }: TripInfoProps) {
           <p className="pl-6 text-sm">{trip.destination.name}</p>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-col gap-2">
+        <RouteOptimizer trip={trip} />
         <Button variant="destructive" className="w-full" onClick={onEndTrip}>End Trip</Button>
       </CardFooter>
     </Card>
