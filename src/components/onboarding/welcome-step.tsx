@@ -25,7 +25,7 @@ const welcomeSlides = [
       alt: "A modern car driving through a well-lit city tunnel at night.",
       hint: "car city",
     },
-    title: "Welcome to Rad Captian",
+    title: "Welcome to RadCaptian",
     description: "Your journey as a driver starts here. Let's get you set up to start earning.",
   },
   {

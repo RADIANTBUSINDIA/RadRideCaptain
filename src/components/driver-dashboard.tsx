@@ -101,7 +101,7 @@ export default function DriverDashboard() {
       <header className="flex items-center justify-between p-4 border-b bg-card">
         <div className="flex items-center gap-2">
           <Car className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-bold">Rad Captian</h1>
+          <h1 className="text-2xl font-bold">RadCaptian</h1>
         </div>
         <div className="flex items-center space-x-2">
           <Label htmlFor="availability-toggle" className={isAvailable ? "text-primary font-semibold" : ""}>

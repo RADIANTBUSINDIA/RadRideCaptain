@@ -96,7 +96,7 @@ export default function FinalStatusStep({ formData }: FinalStatusStepProps) {
          <>
             <h2 className="text-2xl font-bold mb-2">Profile Approved!</h2>
             <p className="text-muted-foreground mb-4">
-                Welcome to Rad Captian! You are all set to start driving.
+                Welcome to RadCaptian! You are all set to start driving.
             </p>
             <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 my-6 flex items-center justify-center space-x-3">
                 <CheckCircle className="w-5 h-5" />
