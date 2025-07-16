@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { BookingRequest } from "@/lib/types";
@@ -25,7 +26,7 @@ export default function BookingAlert({
 }: BookingAlertProps) {
   return (
     <Dialog open={!!bookingRequest} onOpenChange={(isOpen) => !isOpen && onDecline()}>
-      <DialogContent className="sm:max-w-md animate-pulse-glow border-accent border-2">
+      <DialogContent className="sm:max-w-md border-accent border-2">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
             New Booking Request!

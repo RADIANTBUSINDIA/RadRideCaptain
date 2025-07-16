@@ -58,7 +58,7 @@ function deg2rad(deg: number) {
 }
 
 
-export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolean, driverLocation: Location | null) {
+export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolean) {
   const [bookingRequest, setBookingRequest] = useState<BookingRequest | null>(null);
 
   const clearBooking = useCallback(() => {
@@ -69,21 +69,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
     let timer: NodeJS.Timeout;
 
     const createNewBooking = async () => {
-        if (!driverLocation) return;
-
-        const potentialBookings = sampleBookings.filter(booking => {
-            const pickupDistance = getDistanceInKm(driverLocation, booking.pickupLocation);
-            // Charters can be far, let's have a wider range
-            return pickupDistance < 50; 
-        });
-
-        if (potentialBookings.length === 0) {
-            const randomDelay = Math.random() * 5000 + 3000; // 3-8 seconds
-            timer = setTimeout(createNewBooking, randomDelay);
-            return;
-        }
-
-      const randomBooking = potentialBookings[Math.floor(Math.random() * potentialBookings.length)];
+      const randomBooking = sampleBookings[Math.floor(Math.random() * sampleBookings.length)];
       setBookingRequest({
         ...randomBooking,
         id: new Date().toISOString(),
@@ -99,7 +85,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
       }
     };
 
-    if (isAvailable && !bookingRequest && !hasActiveTrip && driverLocation) {
+    if (isAvailable && !bookingRequest && !hasActiveTrip) {
       const randomDelay = Math.random() * 3000 + 2000; // 2-5 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
@@ -107,7 +93,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
     return () => {
       clearTimeout(timer);
     };
-  }, [isAvailable, bookingRequest, hasActiveTrip, driverLocation]);
+  }, [isAvailable, bookingRequest, hasActiveTrip]);
 
   return { bookingRequest, clearBooking };
 }

@@ -27,7 +27,7 @@ export default function DriverDashboard() {
   const { toast } = useToast();
   const { currentLocation } = useGeolocation();
 
-  const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
+  const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
   
   const handleAccept = () => {
     if (bookingRequest) {
