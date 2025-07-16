@@ -46,10 +46,8 @@ export default function DriverDashboard() {
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
-  const [isClient, setIsClient] = useState(false);
-
+  
   useEffect(() => {
-    setIsClient(true);
     setTripHistory(generatePastTrips());
   }, []);
 
@@ -156,7 +154,7 @@ export default function DriverDashboard() {
              {acceptedTrip ? (
                 <TripInfo trip={acceptedTrip} onEndTrip={handleEndTrip} />
              ) : (
-                isClient && <DriverStats tripHistory={tripHistory} />
+                <DriverStats tripHistory={tripHistory} />
              )}
         </div>
       </main>
