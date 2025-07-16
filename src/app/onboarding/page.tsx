@@ -26,8 +26,10 @@ export default function OnboardingPage() {
     vehicleNumber: "",
     rcFile: null,
     licenseFile: null,
-    aadharFile: null,
-    policeVerificationFile: null,
+    insuranceFile: null,
+    fitnessCertificateFile: null,
+    vehiclePhotoFile: null,
+    userPhotoFile: null,
   });
 
   const nextStep = () => setStep((prev) => prev + 1);

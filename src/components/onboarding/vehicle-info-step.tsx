@@ -34,8 +34,7 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
         formData.vehicleType.trim() !== "" &&
         formData.vehicleModel.trim() !== "" &&
         formData.vehicleColor.trim() !== "" &&
-        formData.vehicleNumber.trim() !== "" &&
-        formData.rcFile !== null
+        formData.vehicleNumber.trim() !== ""
     );
   };
 
@@ -73,17 +72,6 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
              <div className="space-y-2">
                 <Label htmlFor="vehicleNumber">Vehicle Number</Label>
                 <Input id="vehicleNumber" name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange} placeholder="e.g. KA 01 AB 1234" />
-            </div>
-        </div>
-        
-        <div className="space-y-2">
-            <Label htmlFor="rcFile">Upload RC (Registration Certificate)</Label>
-            <div className="flex items-center space-x-2">
-                <Input id="rcFile" name="rcFile" type="file" className="hidden" onChange={handleChange} />
-                <Label htmlFor="rcFile" className="flex items-center justify-center w-full p-3 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
-                    <Upload className="w-5 h-5 mr-2" />
-                    <span>{formData.rcFile ? formData.rcFile.name : 'Click to upload file'}</span>
-                </Label>
             </div>
         </div>
       </div>

@@ -17,16 +17,16 @@ const InfoItem = ({ label, value }: { label: string, value: string | null }) => 
     </div>
 );
 
-const FileItem = ({ label, file }: { label: string, file: File | null }) => (
+const FileItem = ({ label, file, isOptional = false }: { label: string, file: File | null, isOptional?: boolean }) => (
      <div className="flex justify-between py-2 border-b items-center">
-        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="text-sm text-muted-foreground">{label} {isOptional && <span className="text-xs">(Optional)</span>}</p>
         {file ? (
             <span className="flex items-center text-sm font-medium text-green-600">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 {file.name}
             </span>
         ) : (
-            <p className="text-sm font-medium text-red-500">Not uploaded</p>
+             !isOptional && <p className="text-sm font-medium text-red-500">Not uploaded</p>
         )}
     </div>
 )
@@ -61,7 +61,6 @@ export default function ReviewSubmitStep({ onNext, onBack, formData }: ReviewSub
                 <InfoItem label="Model" value={formData.vehicleModel} />
                 <InfoItem label="Color" value={formData.vehicleColor} />
                 <InfoItem label="Vehicle Number" value={formData.vehicleNumber} />
-                <FileItem label="Registration Certificate (RC)" file={formData.rcFile} />
             </CardContent>
         </Card>
 
@@ -70,9 +69,12 @@ export default function ReviewSubmitStep({ onNext, onBack, formData }: ReviewSub
                 <CardTitle className="flex items-center text-lg"><File className="w-5 h-5 mr-3 text-primary"/>Documents</CardTitle>
             </CardHeader>
             <CardContent>
+                <FileItem label="RC Card" file={formData.rcFile} />
                 <FileItem label="Driving License" file={formData.licenseFile} />
-                <FileItem label="Aadhar/PAN Card" file={formData.aadharFile} />
-                <FileItem label="Police Verification" file={formData.policeVerificationFile} />
+                <FileItem label="Insurance" file={formData.insuranceFile} />
+                <FileItem label="Fitness Certificate" file={formData.fitnessCertificateFile} />
+                <FileItem label="Vehicle Photo" file={formData.vehiclePhotoFile} />
+                <FileItem label="Your Photo" file={formData.userPhotoFile} isOptional />
             </CardContent>
         </Card>
       </div>
