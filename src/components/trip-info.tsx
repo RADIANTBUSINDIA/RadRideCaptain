@@ -11,20 +11,31 @@ import type { TripStage } from "./driver-dashboard";
 interface TripInfoProps {
   trip: BookingRequest;
   tripStage: TripStage;
-  driverLocation: Location | null;
   onArrived: () => void;
   onEndTrip: () => void;
 }
 
-export default function TripInfo({ trip, tripStage, driverLocation, onArrived, onEndTrip }: TripInfoProps) {
+interface CachedTrip {
+    pickupLocation: Location;
+    destination: Location;
+}
+
+export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: TripInfoProps) {
 
   const getGoogleMapsUrl = () => {
-    if (tripStage === 'DRIVING_TO_PICKUP') {
-      if (!driverLocation) return '#';
-      return `https://www.google.com/maps/dir/?api=1&origin=${driverLocation.lat},${driverLocation.lng}&destination=${trip.pickupLocation.lat},${trip.pickupLocation.lng}&travelmode=driving`;
+    try {
+        const cachedTripData = localStorage.getItem("radcaptian_current_trip");
+        if (!cachedTripData) return '#';
+        
+        const { pickupLocation, destination }: CachedTrip = JSON.parse(cachedTripData);
+
+        if (pickupLocation && destination) {
+            return `https://www.google.com/maps/dir/?api=1&origin=${pickupLocation.lat},${pickupLocation.lng}&destination=${destination.lat},${destination.lng}&travelmode=driving`;
+        }
+    } catch (error) {
+        console.error("Failed to get cached trip data for navigation:", error);
     }
-    // For TRIP_IN_PROGRESS
-    return `https://www.google.com/maps/dir/?api=1&origin=${trip.pickupLocation.lat},${trip.pickupLocation.lng}&destination=${trip.destination.lat},${trip.destination.lng}&travelmode=driving`;
+    return '#';
   };
 
   const googleMapsUrl = getGoogleMapsUrl();
@@ -116,6 +127,7 @@ export default function TripInfo({ trip, tripStage, driverLocation, onArrived, o
                 <Pin className="mx-auto h-8 w-8 text-primary mb-2"/>
                 <p className="font-semibold">Enter the 4-digit PIN</p>
                 <p className="text-sm text-muted-foreground">Ask the rider for their PIN to start the trip.</p>
+                <p className="text-sm text-muted-foreground mt-2">PIN for testing: <strong className="text-foreground">{trip.riderPin}</strong></p>
             </div>
         )}
       </CardContent>

@@ -19,6 +19,8 @@ import { useGeolocation } from "@/hooks/use-geolocation";
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
 
+const CACHED_TRIP_KEY = "radcaptian_current_trip";
+
 export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
@@ -33,6 +35,18 @@ export default function DriverDashboard() {
     if (bookingRequest) {
       setAcceptedTrip(bookingRequest);
       setTripStage('DRIVING_TO_PICKUP');
+
+      // Cache the trip details in localStorage
+      try {
+        const tripToCache = {
+            pickupLocation: bookingRequest.pickupLocation,
+            destination: bookingRequest.destination,
+        };
+        localStorage.setItem(CACHED_TRIP_KEY, JSON.stringify(tripToCache));
+      } catch (error) {
+        console.error("Failed to cache trip data:", error);
+      }
+
       clearBooking();
     }
   };
@@ -51,12 +65,22 @@ export default function DriverDashboard() {
     }
   };
 
+  const clearTripData = () => {
+    setAcceptedTrip(null);
+    setTripStage(null);
+    try {
+        localStorage.removeItem(CACHED_TRIP_KEY);
+    } catch (error) {
+        console.error("Failed to remove cached trip data:", error);
+    }
+  };
+
+
   const handleAvailabilityChange = (checked: boolean) => {
     setIsAvailable(checked);
     if (!checked) {
       clearBooking();
-      setAcceptedTrip(null);
-      setTripStage(null);
+      clearTripData();
     }
   };
 
@@ -70,8 +94,7 @@ export default function DriverDashboard() {
         timestamp: new Date().toISOString(),
       };
       setTripHistory(prev => [completedTrip, ...prev]);
-      setAcceptedTrip(null);
-      setTripStage(null);
+      clearTripData();
     }
   }
 
@@ -166,7 +189,6 @@ export default function DriverDashboard() {
                 <TripInfo 
                   trip={acceptedTrip} 
                   tripStage={tripStage}
-                  driverLocation={currentLocation}
                   onArrived={handleArrived}
                   onEndTrip={handleEndTrip} 
                 />
