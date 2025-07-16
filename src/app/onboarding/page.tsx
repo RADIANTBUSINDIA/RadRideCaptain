@@ -1,8 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import WelcomeStep from "@/components/onboarding/welcome-step";
-import PhoneVerificationStep from "@/components/onboarding/phone-verification-step";
+import PhoneEntryStep from "@/components/onboarding/phone-entry-step";
+import OtpVerificationStep from "@/components/onboarding/otp-verification-step";
 import BasicInfoStep from "@/components/onboarding/basic-info-step";
 import VehicleInfoStep from "@/components/onboarding/vehicle-info-step";
 import DocumentUploadStep from "@/components/onboarding/document-upload-step";
@@ -39,7 +41,7 @@ export default function OnboardingPage() {
     setFormData((prev) => ({ ...prev, ...data }));
   };
 
-  const totalSteps = 7;
+  const totalSteps = 8;
   const progressValue = (step / totalSteps) * 100;
 
   const renderStep = () => {
@@ -48,7 +50,7 @@ export default function OnboardingPage() {
         return <WelcomeStep onNext={nextStep} />;
       case 2:
         return (
-          <PhoneVerificationStep
+          <PhoneEntryStep
             onNext={nextStep}
             onBack={prevStep}
             updateFormData={updateFormData}
@@ -57,16 +59,16 @@ export default function OnboardingPage() {
         );
       case 3:
         return (
-          <BasicInfoStep
+          <OtpVerificationStep
             onNext={nextStep}
             onBack={prevStep}
             updateFormData={updateFormData}
-            formData={formData}
+            phone={formData.phone}
           />
         );
       case 4:
         return (
-          <VehicleInfoStep
+          <BasicInfoStep
             onNext={nextStep}
             onBack={prevStep}
             updateFormData={updateFormData}
@@ -75,13 +77,22 @@ export default function OnboardingPage() {
         );
       case 5:
         return (
+          <VehicleInfoStep
+            onNext={nextStep}
+            onBack={prevStep}
+            updateFormData={updateFormData}
+            formData={formData}
+          />
+        );
+      case 6:
+        return (
           <DocumentUploadStep
             onNext={nextStep}
             onBack={prevStep}
             updateFormData={updateFormData}
           />
         );
-      case 6:
+      case 7:
         return (
           <ReviewSubmitStep
             onNext={nextStep}
@@ -89,7 +100,7 @@ export default function OnboardingPage() {
             formData={formData}
           />
         );
-      case 7:
+      case 8:
         return <FinalStatusStep formData={formData} />;
       default:
         return <WelcomeStep onNext={nextStep} />;
@@ -109,7 +120,7 @@ export default function OnboardingPage() {
       <div className="w-full max-w-2xl">
         {step < totalSteps && (
           <div className="mb-8">
-            <h2 className="text-center text-sm font-semibold text-primary mb-2">Step {step} of {totalSteps -1}</h2>
+            <h2 className="text-center text-sm font-semibold text-primary mb-2">Step {step-1} of {totalSteps - 2}</h2>
             <Progress value={progressValue} className="w-full" />
           </div>
         )}
