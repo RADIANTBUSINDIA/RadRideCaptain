@@ -88,7 +88,7 @@ export default function OnboardingPage() {
           />
         );
       case 7:
-        return <FinalStatusStep />;
+        return <FinalStatusStep formData={formData} />;
       default:
         return <WelcomeStep onNext={nextStep} />;
     }

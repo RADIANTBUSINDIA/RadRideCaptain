@@ -4,10 +4,11 @@ import type { Trip } from "@/lib/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BarChart as BarChartIcon, BadgeDollarSign, History, TrendingUp, TrendingDown, Award } from "lucide-react";
+import { BarChart as BarChartIcon, BadgeDollarSign, History, User } from "lucide-react";
 import { format } from "date-fns";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import DriverProfile from "./driver-profile";
 
 interface DriverStatsProps {
   tripHistory: Trip[];
@@ -42,15 +43,16 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Driver Stats</CardTitle>
-        <CardDescription>Your performance, earnings, and ride history.</CardDescription>
+        <CardTitle>Driver Hub</CardTitle>
+        <CardDescription>Your performance, earnings, and profile.</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 min-h-0">
         <Tabs defaultValue="history" className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="history"><History className="w-4 h-4 mr-1" /> History</TabsTrigger>
             <TabsTrigger value="earnings"><BadgeDollarSign className="w-4 h-4 mr-1"/> Earnings</TabsTrigger>
             <TabsTrigger value="performance"><BarChartIcon className="w-4 h-4 mr-1"/> Performance</TabsTrigger>
+            <TabsTrigger value="profile"><User className="w-4 h-4 mr-1" /> Profile</TabsTrigger>
           </TabsList>
           
           <TabsContent value="history" className="flex-1 mt-4 overflow-hidden">
@@ -119,13 +121,13 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                 <div className="grid grid-cols-2 gap-4">
                      <Card className="text-center">
                         <CardHeader className="p-3">
-                            <CardDescription className="flex items-center justify-center gap-2"><TrendingUp className="w-5 h-5 text-green-500"/> Accepted</CardDescription>
+                            <CardDescription>Accepted Rides</CardDescription>
                             <CardTitle className="text-3xl">{completedTrips.length}</CardTitle>
                         </CardHeader>
                     </Card>
                      <Card className="text-center">
                         <CardHeader className="p-3">
-                            <CardDescription className="flex items-center justify-center gap-2"><TrendingDown className="w-5 h-5 text-red-500"/> Rejected</CardDescription>
+                            <CardDescription>Rejected Rides</CardDescription>
                             <CardTitle className="text-3xl">{rejectedTrips.length}</CardTitle>
                         </CardHeader>
                     </Card>
@@ -145,6 +147,12 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                     </ChartContainer>
                 </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="profile" className="flex-1 mt-4 overflow-hidden">
+             <ScrollArea className="h-full">
+                <DriverProfile />
+             </ScrollArea>
           </TabsContent>
         </Tabs>
       </CardContent>
