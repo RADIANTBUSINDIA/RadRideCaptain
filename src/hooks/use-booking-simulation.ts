@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { BookingRequest, Trip, Location } from '@/lib/types';
 import * as Tone from 'tone';
 
-const sampleBookings: Omit<BookingRequest, 'id'>[] = [
+const sampleBookings: Omit<BookingRequest, 'id' | 'riderPin'>[] = [
   {
     customerName: 'Mr. Sterling',
     pickupLocation: { name: 'Dubai Marina Yacht Club', lat: 25.0763, lng: 55.1384 },
@@ -39,7 +39,7 @@ const sampleBookings: Omit<BookingRequest, 'id'>[] = [
 ];
 
 // Haversine formula to calculate distance between two lat/lng points
-function getDistanceInKm(loc1: Location, loc2: Location) {
+export function getDistanceInKm(loc1: Location, loc2: Location) {
     const R = 6371; // Radius of the earth in km
     const dLat = deg2rad(loc2.lat - loc1.lat);
     const dLon = deg2rad(loc2.lng - loc1.lng);
@@ -87,6 +87,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
       setBookingRequest({
         ...randomBooking,
         id: new Date().toISOString(),
+        riderPin: String(Math.floor(1000 + Math.random() * 9000)), // Generate 4-digit PIN
       });
       try {
         await Tone.start();

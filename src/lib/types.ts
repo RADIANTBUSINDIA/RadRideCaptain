@@ -10,6 +10,7 @@ export interface BookingRequest {
   pickupLocation: Location;
   destination: Location;
   fareEstimate: number;
+  riderPin: string;
 }
 
 export interface Trip extends BookingRequest {

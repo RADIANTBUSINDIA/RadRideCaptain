@@ -12,12 +12,18 @@ import BookingAlert from "./booking-alert";
 import MapView from "./map-view";
 import DriverStats from "./driver-stats";
 import TripInfo from "./trip-info";
+import PinEntryDialog from "./pin-entry-dialog";
+import { useToast } from "@/hooks/use-toast";
+
+export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
 
 export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
+  const [tripStage, setTripStage] = useState<TripStage | null>(null);
   const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -30,7 +36,6 @@ export default function DriverDashboard() {
         },
         (error) => {
           console.error("Error getting user location:", error);
-          // As a fallback, use a default location if geolocation fails
           if (!currentLocation) {
             setCurrentLocation({ lat: 25.2048, lng: 55.2708 }); // Dubai, UAE
           }
@@ -39,7 +44,6 @@ export default function DriverDashboard() {
       );
       return () => navigator.geolocation.clearWatch(watchId);
     } else {
-        // Fallback for browsers without geolocation support
         if (!currentLocation) {
             setCurrentLocation({ lat: 25.2048, lng: 55.2708 }); // Dubai, UAE
         }
@@ -51,6 +55,7 @@ export default function DriverDashboard() {
   const handleAccept = () => {
     if (bookingRequest) {
       setAcceptedTrip(bookingRequest);
+      setTripStage('DRIVING_TO_PICKUP');
       clearBooking();
     }
   };
@@ -74,24 +79,44 @@ export default function DriverDashboard() {
     if (!checked) {
       clearBooking();
       setAcceptedTrip(null);
+      setTripStage(null);
     }
   };
 
-  const handleEndTrip = () => {
+  const completeTrip = () => {
     if (acceptedTrip) {
       const completedTrip: Trip = {
         ...acceptedTrip,
         status: 'completed',
-        // In a real app, fare would be calculated
         finalFare: acceptedTrip.fareEstimate,
-        // Tip would be added by the user
         tip: Math.floor(Math.random() * (acceptedTrip.fareEstimate * 0.25)),
         timestamp: new Date().toISOString(),
       };
       setTripHistory(prev => [completedTrip, ...prev]);
       setAcceptedTrip(null);
+      setTripStage(null);
     }
   }
+
+  const handleArrived = () => {
+    setTripStage('AWAITING_PIN');
+  };
+
+  const handlePinVerified = () => {
+    setTripStage('TRIP_IN_PROGRESS');
+    toast({
+        title: "PIN Verified!",
+        description: "Trip started. Have a safe journey!",
+    });
+  };
+
+  const handleEndTrip = () => {
+    completeTrip();
+    toast({
+        title: "Trip Ended",
+        description: "The trip has been successfully completed.",
+    });
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -121,10 +146,23 @@ export default function DriverDashboard() {
             onDecline={handleDecline}
           />
         )}
+
+        {acceptedTrip && tripStage === 'AWAITING_PIN' && (
+            <PinEntryDialog 
+                isOpen={tripStage === 'AWAITING_PIN'}
+                correctPin={acceptedTrip.riderPin}
+                onPinVerified={handlePinVerified}
+                onClose={() => setTripStage('DRIVING_TO_PICKUP')} // Go back to pickup screen
+            />
+        )}
         
         <div className="lg:col-span-3 flex flex-col gap-6 h-full">
-            {acceptedTrip ? (
-                <MapView trip={acceptedTrip} onEndTrip={handleEndTrip} driverLocation={currentLocation} />
+            {acceptedTrip && tripStage ? (
+                <MapView 
+                  trip={acceptedTrip} 
+                  tripStage={tripStage}
+                  driverLocation={currentLocation} 
+                />
             ) : (
                 <Card className="h-full flex items-center justify-center">
                     <CardContent className="p-0">
@@ -148,8 +186,13 @@ export default function DriverDashboard() {
             )}
         </div>
         <div className="lg:col-span-2 h-full overflow-y-auto">
-             {acceptedTrip ? (
-                <TripInfo trip={acceptedTrip} onEndTrip={handleEndTrip} />
+             {acceptedTrip && tripStage ? (
+                <TripInfo 
+                  trip={acceptedTrip} 
+                  tripStage={tripStage}
+                  onArrived={handleArrived}
+                  onEndTrip={handleEndTrip} 
+                />
              ) : (
                 <DriverStats tripHistory={tripHistory} />
              )}

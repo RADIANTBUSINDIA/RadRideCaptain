@@ -1,18 +1,66 @@
 "use client";
 
-import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
+import React from "react";
+import { APIProvider, Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { MapPin, Navigation } from "lucide-react";
 import type { BookingRequest, Location } from "@/lib/types";
+import type { TripStage } from "./driver-dashboard";
 
 interface MapViewProps {
   trip: BookingRequest;
-  onEndTrip: () => void;
+  tripStage: TripStage;
   driverLocation: Location | null;
 }
 
-export default function MapView({ trip, onEndTrip, driverLocation }: MapViewProps) {
+interface DirectionsRendererProps {
+  origin: Location;
+  destination: Location;
+}
+
+const DirectionsRenderer = ({ origin, destination }: DirectionsRendererProps) => {
+    const map = useMap();
+    const directionsService = React.useRef<google.maps.DirectionsService | null>(null);
+    const directionsRenderer = React.useRef<google.maps.DirectionsRenderer | null>(null);
+
+    React.useEffect(() => {
+        if (!map) return;
+        if (!directionsService.current) {
+            directionsService.current = new google.maps.DirectionsService();
+        }
+        if (!directionsRenderer.current) {
+            directionsRenderer.current = new google.maps.DirectionsRenderer({ suppressMarkers: true });
+            directionsRenderer.current.setMap(map);
+        }
+
+        const request: google.maps.DirectionsRequest = {
+            origin: new google.maps.LatLng(origin.lat, origin.lng),
+            destination: new google.maps.LatLng(destination.lat, destination.lng),
+            travelMode: google.maps.TravelMode.DRIVING,
+        };
+
+        directionsService.current.route(request, (result, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsRenderer.current?.setDirections(result);
+            } else {
+                console.error(`Directions request failed due to ${status}`);
+            }
+        });
+
+        // Cleanup on unmount
+        return () => {
+            if (directionsRenderer.current) {
+                directionsRenderer.current.setMap(null);
+                directionsRenderer.current = null;
+            }
+        };
+
+    }, [map, origin, destination]);
+
+    return null;
+}
+
+export default function MapView({ trip, tripStage, driverLocation }: MapViewProps) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   if (!apiKey) {
@@ -30,10 +78,10 @@ export default function MapView({ trip, onEndTrip, driverLocation }: MapViewProp
 
   const { pickupLocation, destination } = trip;
   
-  const center = driverLocation ? driverLocation : {
-    lat: (pickupLocation.lat + destination.lat) / 2,
-    lng: (pickupLocation.lng + destination.lng) / 2,
-  };
+  const origin = tripStage === 'DRIVING_TO_PICKUP' && driverLocation ? driverLocation : pickupLocation;
+  const target = tripStage === 'DRIVING_TO_PICKUP' ? pickupLocation : destination;
+
+  const center = driverLocation || pickupLocation;
 
   return (
     <Card className="h-full w-full overflow-hidden relative">
@@ -65,11 +113,9 @@ export default function MapView({ trip, onEndTrip, driverLocation }: MapViewProp
               <MapPin className="w-10 h-10 text-red-500" fill="currentColor" />
             </div>
           </AdvancedMarker>
+          <DirectionsRenderer origin={origin} destination={target} />
         </Map>
       </APIProvider>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-        <Button variant="destructive" size="lg" onClick={onEndTrip} className="shadow-lg animate-pulse">End Trip</Button>
-      </div>
     </Card>
   );
 }
