@@ -98,7 +98,7 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
             <MapPin className="w-4 h-4 text-red-500" /> 
             Destination
           </div>
-          p className="pl-6 text-sm">{trip.destination.name}</p>
+          <p className="pl-6 text-sm">{trip.destination.name}</p>
         </div>
 
         {tripStage === 'AWAITING_PIN' && (
