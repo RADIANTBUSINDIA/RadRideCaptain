@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import DriverStats from "./driver-stats";
 import TripInfo from "./trip-info";
 import PinEntryDialog from "./pin-entry-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useGeolocation } from "@/hooks/use-geolocation";
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
 
@@ -21,34 +23,9 @@ export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
   const [tripStage, setTripStage] = useState<TripStage | null>(null);
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          setCurrentLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error getting user location:", error);
-          if (!currentLocation) {
-            setCurrentLocation({ lat: 25.2048, lng: 55.2708 }); // Dubai, UAE
-          }
-        },
-        { enableHighAccuracy: true }
-      );
-      return () => navigator.geolocation.clearWatch(watchId);
-    } else {
-        if (!currentLocation) {
-            setCurrentLocation({ lat: 25.2048, lng: 55.2708 }); // Dubai, UAE
-        }
-    }
-  }, [currentLocation]);
+  const { currentLocation } = useGeolocation();
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
   
