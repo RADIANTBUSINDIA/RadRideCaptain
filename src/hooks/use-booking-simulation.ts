@@ -48,6 +48,25 @@ function generateRandomPoint(center: Location, radius: number): Location {
     };
 }
 
+// Haversine formula to calculate distance between two lat/lng points
+function getDistanceInKm(loc1: Location, loc2: Location) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(loc2.lat - loc1.lat);
+    const dLon = deg2rad(loc2.lng - loc1.lng);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(loc1.lat)) * Math.cos(deg2rad(loc2.lat)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        ;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+}
+
+function deg2rad(deg: number) {
+    return deg * (Math.PI / 180)
+}
+
 
 export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolean, currentLocation: Location | null) {
   const [bookingRequest, setBookingRequest] = useState<BookingRequest | null>(null);
@@ -58,72 +77,69 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
+    let isCancelled = false;
 
     const createNewBooking = async () => {
       // Use the current location if available, otherwise default to a location in Dubai
       const baseLocation = currentLocation || { name: "Dubai, UAE", lat: 25.2048, lng: 55.2708 };
       
-      let pickupLocation, destination;
-      
+      let pickupLocation, destination, driverToPickupDistance, pickupToDropoffDistance;
+      let isValidRequest = false;
+
+      // Keep generating requests until one meets the criteria
       do {
-        pickupLocation = generateRandomPoint(baseLocation, 1);
-        destination = generateRandomPoint(pickupLocation, 50);
-      } while (pickupLocation.name === destination.name); // Ensure pickup and destination are not the same place
+        pickupLocation = generateRandomPoint(baseLocation, 1); // Generate pickup within 1km radius for more chances
+        destination = generateRandomPoint(pickupLocation, 55); // Generate up to 55km to have some drops over 50km
+        
+        driverToPickupDistance = getDistanceInKm(baseLocation, pickupLocation);
+        pickupToDropoffDistance = getDistanceInKm(pickupLocation, destination);
+
+        // Check if the generated request is valid
+        if (driverToPickupDistance <= 0.5 && pickupToDropoffDistance <= 50) {
+            isValidRequest = true;
+        }
+
+      } while (!isValidRequest);
 
 
       const randomCustomerName = indianCustomerNames[Math.floor(Math.random() * indianCustomerNames.length)];
 
       // Estimate fare based on a simple distance calculation
-      const distance = getDistanceInKm(pickupLocation, destination);
-      const fareEstimate = 50 + (distance * 15); // Base fare + per km charge
+      const fareEstimate = 50 + (pickupToDropoffDistance * 15); // Base fare + per km charge
 
-      setBookingRequest({
-        id: new Date().toISOString(),
-        customerName: randomCustomerName,
-        pickupLocation,
-        destination,
-        fareEstimate: parseFloat(fareEstimate.toFixed(2)),
-        riderPin: String(Math.floor(1000 + Math.random() * 9000)),
-      });
+      if (!isCancelled) {
+        setBookingRequest({
+            id: new Date().toISOString(),
+            customerName: randomCustomerName,
+            pickupLocation,
+            destination,
+            fareEstimate: parseFloat(fareEstimate.toFixed(2)),
+            riderPin: String(Math.floor(1000 + Math.random() * 9000)),
+        });
 
-      try {
-        await Tone.start();
-        const synth = new Tone.Synth().toDestination();
-        synth.triggerAttackRelease("C5", "8n", Tone.now());
-        synth.triggerAttackRelease("G5", "8n", Tone.now() + 0.2);
-      } catch (e) {
-        console.error("Audio could not start: ", e);
+        try {
+            await Tone.start();
+            const synth = new Tone.Synth().toDestination();
+            synth.triggerAttackRelease("C5", "8n", Tone.now());
+            synth.triggerAttackRelease("G5", "8n", Tone.now() + 0.2);
+        } catch (e) {
+            console.error("Audio could not start: ", e);
+        }
       }
     };
 
-    if (isAvailable && !bookingRequest && !hasActiveTrip) {
+    if (isAvailable && !bookingRequest && !hasActiveTrip && currentLocation) {
       const randomDelay = Math.random() * 3000 + 2000; // 2-5 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
 
     return () => {
+      isCancelled = true;
       clearTimeout(timer);
     };
   }, [isAvailable, bookingRequest, hasActiveTrip, currentLocation]);
 
-  // Haversine formula to calculate distance between two lat/lng points
-  function getDistanceInKm(loc1: Location, loc2: Location) {
-      const R = 6371; // Radius of the earth in km
-      const dLat = deg2rad(loc2.lat - loc1.lat);
-      const dLon = deg2rad(loc2.lng - loc1.lng);
-      const a =
-          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(deg2rad(loc1.lat)) * Math.cos(deg2rad(loc2.lat)) *
-          Math.sin(dLon / 2) * Math.sin(dLon / 2)
-          ;
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      const d = R * c; // Distance in km
-      return d;
-  }
 
-  function deg2rad(deg: number) {
-      return deg * (Math.PI / 180)
-  }
 
   return { bookingRequest, clearBooking };
 }
