@@ -189,6 +189,7 @@ export default function DriverDashboard() {
                 <TripInfo 
                   trip={acceptedTrip} 
                   tripStage={tripStage}
+                  driverLocation={currentLocation}
                   onArrived={handleArrived}
                   onEndTrip={handleEndTrip} 
                 />

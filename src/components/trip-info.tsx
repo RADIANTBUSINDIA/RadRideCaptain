@@ -11,31 +11,28 @@ import type { TripStage } from "./driver-dashboard";
 interface TripInfoProps {
   trip: BookingRequest;
   tripStage: TripStage;
+  driverLocation: Location | null;
   onArrived: () => void;
   onEndTrip: () => void;
 }
 
-interface CachedTrip {
-    pickupLocation: Location;
-    destination: Location;
-}
-
-export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: TripInfoProps) {
+export default function TripInfo({ trip, tripStage, driverLocation, onArrived, onEndTrip }: TripInfoProps) {
 
   const getGoogleMapsUrl = () => {
-    try {
-        const cachedTripData = localStorage.getItem("radcaptian_current_trip");
-        if (!cachedTripData) return '#';
-        
-        const { pickupLocation, destination }: CachedTrip = JSON.parse(cachedTripData);
+    if (!trip) return '#';
 
-        if (pickupLocation && destination) {
-            return `https://www.google.com/maps/dir/?api=1&origin=${pickupLocation.lat},${pickupLocation.lng}&destination=${destination.lat},${destination.lng}&travelmode=driving`;
-        }
-    } catch (error) {
-        console.error("Failed to get cached trip data for navigation:", error);
+    const { pickupLocation, destination } = trip;
+    let url = 'https://www.google.com/maps/dir/?api=1&travelmode=driving';
+
+    if (tripStage === 'DRIVING_TO_PICKUP' && driverLocation) {
+        url += `&origin=${driverLocation.lat},${driverLocation.lng}&destination=${pickupLocation.lat},${pickupLocation.lng}`;
+    } else if (tripStage === 'TRIP_IN_PROGRESS') {
+        url += `&origin=${pickupLocation.lat},${pickupLocation.lng}&destination=${destination.lat},${destination.lng}`;
+    } else {
+        return '#'; // Not enough info to generate a link
     }
-    return '#';
+    
+    return url;
   };
 
   const googleMapsUrl = getGoogleMapsUrl();
