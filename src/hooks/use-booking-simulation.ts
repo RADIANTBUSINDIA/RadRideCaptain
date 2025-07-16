@@ -12,11 +12,11 @@ const indianCustomerNames = [
   "Pari Reddy", "Myra Joshi", "Anika Nair", "Kiara Mehta", "Sia Iyer"
 ];
 
-const dubaiLocations = [
-    "Burj Khalifa", "The Dubai Mall", "Dubai Marina", "Palm Jumeirah", "Jumeirah Beach Residence (JBR)",
-    "Downtown Dubai", "Business Bay", "Deira City Centre", "Mall of the Emirates", "Dubai International Airport (DXB)",
-    "Al Karama", "Jumeirah Lakes Towers (JLT)", "Dubai Creek", "The Walk at JBR", "La Mer", "City Walk",
-    "Dubai Frame", "Global Village", "Miracle Garden", "Kite Beach"
+const bangaloreLocations = [
+    "Lalbagh Botanical Garden", "Cubbon Park", "MG Road", "Koramangala", "Indiranagar",
+    "Vidhana Soudha", "Bangalore Palace", "Commercial Street", "UB City", "Bannerghatta National Park",
+    "HSR Layout", "Marathahalli", "Whitefield", "Electronic City", "Jayanagar", "JP Nagar",
+    "Basavanagudi", "Malleswaram", "Majestic", "Shivajinagar"
 ];
 
 
@@ -39,7 +39,7 @@ function generateRandomPoint(center: Location, radius: number): Location {
     // Adjust the x-coordinate for the shrinking of the east-west distances
     const new_x = x / Math.cos(y0 * Math.PI / 180);
 
-    const randomLocationName = dubaiLocations[Math.floor(Math.random() * dubaiLocations.length)];
+    const randomLocationName = bangaloreLocations[Math.floor(Math.random() * bangaloreLocations.length)];
 
     return {
         name: randomLocationName,
@@ -80,8 +80,8 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
     let isCancelled = false;
 
     const createNewBooking = async () => {
-      // Use the current location if available, otherwise default to a location in Dubai
-      const baseLocation = currentLocation || { name: "Dubai, UAE", lat: 25.2048, lng: 55.2708 };
+      // Use the current location if available, otherwise default to a location in Bangalore
+      const baseLocation = currentLocation || { name: "Jayanagar 4th Block, Bangalore", lat: 12.9293, lng: 77.5825 };
       
       let pickupLocation, destination, driverToPickupDistance, pickupToDropoffDistance;
       let isValidRequest = false;

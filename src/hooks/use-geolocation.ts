@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import type { Location } from '@/lib/types';
 
-const DEFAULT_LOCATION: Location = { name: "Dubai, UAE", lat: 25.2048, lng: 55.2708 };
+const DEFAULT_LOCATION: Location = { name: "Jayanagar 4th Block, Bangalore", lat: 12.9293, lng: 77.5825 };
 
 export function useGeolocation() {
   const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
