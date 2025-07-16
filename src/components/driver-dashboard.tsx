@@ -5,7 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { WifiOff, Car, LoaderCircle } from "lucide-react";
-import { useBookingSimulation, generatePastTrips } from "@/hooks/use-booking-simulation";
+import { useBookingSimulation } from "@/hooks/use-booking-simulation";
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
 import MapView from "./map-view";
@@ -16,6 +16,7 @@ export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
   const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [tripHistory, setTripHistory] = useState<Trip[]>([]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -45,12 +46,7 @@ export default function DriverDashboard() {
   }, [currentLocation]);
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
-  const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   
-  useEffect(() => {
-    setTripHistory(generatePastTrips());
-  }, []);
-
   const handleAccept = () => {
     if (bookingRequest) {
       setAcceptedTrip(bookingRequest);

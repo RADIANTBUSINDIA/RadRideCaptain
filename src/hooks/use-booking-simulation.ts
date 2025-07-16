@@ -38,25 +38,6 @@ const sampleBookings: Omit<BookingRequest, 'id'>[] = [
   },
 ];
 
-const sampleHistory: Omit<Trip, 'id' | 'customerName' | 'pickupLocation' | 'destination' | 'fareEstimate'>[] = [
-    { status: 'completed', finalFare: 380.00, tip: 50.00, timestamp: '2023-10-27T10:00:00Z' },
-    { status: 'completed', finalFare: 300.50, tip: 30.00, timestamp: '2023-10-27T11:30:00Z' },
-    { status: 'rejected', finalFare: 0, tip: 0, timestamp: '2023-10-27T12:00:00Z' },
-    { status: 'completed', finalFare: 200.00, tip: 25.00, timestamp: '2023-10-27T14:00:00Z' },
-    { status: 'completed', finalFare: 225.25, tip: 20.00, timestamp: '2023-10-27T15:15:00Z' },
-];
-
-export function generatePastTrips(): Trip[] {
-    return sampleHistory.map((historyItem, index) => {
-        const booking = sampleBookings[index % sampleBookings.length];
-        return {
-            ...booking,
-            ...historyItem,
-            id: new Date(historyItem.timestamp).toISOString() + Math.random(),
-        }
-    })
-}
-
 // Haversine formula to calculate distance between two lat/lng points
 function getDistanceInKm(loc1: Location, loc2: Location) {
     const R = 6371; // Radius of the earth in km
