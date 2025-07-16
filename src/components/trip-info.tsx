@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { BookingRequest } from "@/lib/types";
+import type { BookingRequest, Location } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { User, MapPin, Navigation, Pin } from "lucide-react";
@@ -11,13 +11,23 @@ import type { TripStage } from "./driver-dashboard";
 interface TripInfoProps {
   trip: BookingRequest;
   tripStage: TripStage;
+  driverLocation: Location | null;
   onArrived: () => void;
   onEndTrip: () => void;
 }
 
-export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: TripInfoProps) {
+export default function TripInfo({ trip, tripStage, driverLocation, onArrived, onEndTrip }: TripInfoProps) {
 
-  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${trip.pickupLocation.lat},${trip.pickupLocation.lng}&destination=${trip.destination.lat},${trip.destination.lng}&travelmode=driving`;
+  const getGoogleMapsUrl = () => {
+    if (tripStage === 'DRIVING_TO_PICKUP') {
+      if (!driverLocation) return '#';
+      return `https://www.google.com/maps/dir/?api=1&origin=${driverLocation.lat},${driverLocation.lng}&destination=${trip.pickupLocation.lat},${trip.pickupLocation.lng}&travelmode=driving`;
+    }
+    // For TRIP_IN_PROGRESS
+    return `https://www.google.com/maps/dir/?api=1&origin=${trip.pickupLocation.lat},${trip.pickupLocation.lng}&destination=${trip.destination.lat},${trip.destination.lng}&travelmode=driving`;
+  };
+
+  const googleMapsUrl = getGoogleMapsUrl();
 
   const renderCardTitle = () => {
       switch (tripStage) {
@@ -71,7 +81,7 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
                 <CardDescription>{renderCardDescription()}</CardDescription>
             </div>
             {tripStage !== 'AWAITING_PIN' && (
-              <Button asChild variant="outline" size="icon">
+              <Button asChild variant="outline" size="icon" disabled={googleMapsUrl === '#'}>
                   <Link href={googleMapsUrl} target="_blank" rel="noopener noreferrer">
                       <Navigation className="h-4 w-4" />
                       <span className="sr-only">Navigate</span>

@@ -17,14 +17,12 @@ import { Pin } from "lucide-react";
 
 interface PinEntryDialogProps {
   isOpen: boolean;
-  correctPin: string;
   onPinVerified: () => void;
   onClose: () => void;
 }
 
 export default function PinEntryDialog({
   isOpen,
-  correctPin,
   onPinVerified,
   onClose,
 }: PinEntryDialogProps) {

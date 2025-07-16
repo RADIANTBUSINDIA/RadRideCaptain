@@ -127,7 +127,6 @@ export default function DriverDashboard() {
         {acceptedTrip && tripStage === 'AWAITING_PIN' && (
             <PinEntryDialog 
                 isOpen={tripStage === 'AWAITING_PIN'}
-                correctPin={acceptedTrip.riderPin}
                 onPinVerified={handlePinVerified}
                 onClose={() => setTripStage('DRIVING_TO_PICKUP')} // Go back to pickup screen
             />
@@ -167,6 +166,7 @@ export default function DriverDashboard() {
                 <TripInfo 
                   trip={acceptedTrip} 
                   tripStage={tripStage}
+                  driverLocation={currentLocation}
                   onArrived={handleArrived}
                   onEndTrip={handleEndTrip} 
                 />
