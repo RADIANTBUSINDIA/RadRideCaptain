@@ -21,30 +21,30 @@ interface WelcomeStepProps {
 const welcomeSlides = [
   {
     image: {
-      src: "https://images.unsplash.com/photo-1570369219895-31a80b572242?q=80&w=600&h=400&fit=crop",
-      alt: "A modern car driving through a well-lit city tunnel at night.",
-      hint: "car city",
+      src: "https://images.unsplash.com/photo-1593181821899-de47a7d4a67e?q=80&w=600&h=400&fit=crop",
+      alt: "A view from the deck of a modern speedboat cutting through the water.",
+      hint: "speedboat ocean",
     },
-    title: "Welcome to RadCaptian",
-    description: "Your journey as a driver starts here. Let's get you set up to start earning.",
+    title: "Welcome Aboard, RadCaptian",
+    description: "Your journey as a captain starts here. Let's get you set up to start earning on the water.",
   },
   {
     image: {
-      src: "https://images.unsplash.com/photo-1593672715438-d88a70629b59?q=80&w=600&h=400&fit=crop",
-      alt: "A smiling person holding cash, representing earnings.",
-      hint: "person earnings",
+      src: "https://images.unsplash.com/photo-1617124998790-ab64191140a3?q=80&w=600&h=400&fit=crop",
+      alt: "A person confidently steering a boat.",
+      hint: "person steering boat",
     },
-    title: "Earn On Your Schedule",
-    description: "Enjoy the flexibility of being your own boss. Drive when you want, earn what you need.",
+    title: "Chart Your Own Course",
+    description: "Enjoy the freedom of being your own boss. Sail when you want, and navigate your own success.",
   },
   {
     image: {
-      src: "https://images.unsplash.com/photo-1526772810414-358aa268b815?q=80&w=600&h=400&fit=crop",
-      alt: "A smartphone displaying a map with a route, symbolizing smart tools.",
-      hint: "phone map",
+      src: "https://images.unsplash.com/photo-1541690039987-a0027b13e790?q=80&w=600&h=400&fit=crop",
+      alt: "A beautiful tropical island seen from the water, representing a desirable destination.",
+      hint: "tropical island",
     },
-    title: "Smart Tools for Success",
-    description: "From real-time alerts to optimized routes, we're with you on every trip.",
+    title: "Premium Tools for a Premium Service",
+    description: "From smart navigation to seamless bookings, we provide the tools you need for every voyage.",
   },
 ];
 
@@ -107,7 +107,7 @@ export default function WelcomeStep({ onNext }: WelcomeStepProps) {
       {current === count && (
         <div className="mt-4 flex flex-col items-center">
           <Button onClick={onNext} size="lg" className="bg-accent hover:bg-accent/90 w-full max-w-xs">
-            Continue as Driver
+            Continue as Captain
           </Button>
         </div>
       )}

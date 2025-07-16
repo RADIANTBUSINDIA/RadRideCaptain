@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, Car, Mail, Phone } from "lucide-react";
+import { User, Mail, Phone } from "lucide-react";
+import { FaSailboat } from "react-icons/fa6";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface DriverProfileData {
@@ -80,15 +81,15 @@ export default function DriverProfile() {
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center text-lg">
-                        <Car className="w-5 h-5 mr-3 text-primary"/>
-                        Vehicle Details
+                        <FaSailboat className="w-5 h-5 mr-3 text-primary"/>
+                        Vessel Details
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <InfoItem icon={Car} label="Vehicle Type" value={profile.vehicleType} />
-                    <InfoItem icon={Car} label="Model" value={profile.vehicleModel} />
-                    <InfoItem icon={Car} label="Color" value={profile.vehicleColor} />
-                    <InfoItem icon={Car} label="Registration No." value={profile.vehicleNumber} />
+                    <InfoItem icon={FaSailboat} label="Vessel Type" value={profile.vehicleType} />
+                    <InfoItem icon={FaSailboat} label="Model" value={profile.vehicleModel} />
+                    <InfoItem icon={FaSailboat} label="Color" value={profile.vehicleColor} />
+                    <InfoItem icon={FaSailboat} label="Registration No." value={profile.vehicleNumber} />
                 </CardContent>
             </Card>
         </div>

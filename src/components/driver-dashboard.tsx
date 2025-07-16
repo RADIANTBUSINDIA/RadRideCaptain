@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { WifiOff, Car, LoaderCircle } from "lucide-react";
+import { WifiOff, LoaderCircle } from "lucide-react";
+import { FaSailboat } from "react-icons/fa6";
 import { useBookingSimulation } from "@/hooks/use-booking-simulation";
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
@@ -31,7 +32,7 @@ export default function DriverDashboard() {
           console.error("Error getting user location:", error);
           // As a fallback, use a default location if geolocation fails
           if (!currentLocation) {
-            setCurrentLocation({ lat: 12.9299, lng: 77.5815 }); // Jayanagar, Bengaluru
+            setCurrentLocation({ lat: 25.2048, lng: 55.2708 }); // Dubai, UAE
           }
         },
         { enableHighAccuracy: true }
@@ -40,7 +41,7 @@ export default function DriverDashboard() {
     } else {
         // Fallback for browsers without geolocation support
         if (!currentLocation) {
-            setCurrentLocation({ lat: 12.9299, lng: 77.5815 }); // Jayanagar, Bengaluru
+            setCurrentLocation({ lat: 25.2048, lng: 55.2708 }); // Dubai, UAE
         }
     }
   }, [currentLocation]);
@@ -96,7 +97,7 @@ export default function DriverDashboard() {
     <div className="flex flex-col h-screen">
       <header className="flex items-center justify-between p-4 border-b bg-card">
         <div className="flex items-center gap-2">
-          <Car className="h-8 w-8 text-primary" />
+          <FaSailboat className="h-8 w-8 text-primary" />
           <h1 className="text-2xl font-bold">RadCaptian</h1>
         </div>
         <div className="flex items-center space-x-2">
@@ -137,7 +138,7 @@ export default function DriverDashboard() {
                         ) : (
                         <>
                             <LoaderCircle className="w-16 h-16 animate-spin text-primary" />
-                            <h2 className="text-2xl font-semibold">Searching for Rides...</h2>
+                            <h2 className="text-2xl font-semibold">Searching for Charters...</h2>
                             <p>You'll be notified when a new request comes in.</p>
                         </>
                         )}

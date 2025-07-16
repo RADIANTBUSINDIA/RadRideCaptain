@@ -7,34 +7,34 @@ import * as Tone from 'tone';
 
 const sampleBookings: Omit<BookingRequest, 'id'>[] = [
   {
-    customerName: 'Aarav Sharma',
-    pickupLocation: { name: 'Powerdbooks, Jayanagar 4th Block, Bengaluru', lat: 12.9299, lng: 77.5815 },
-    destination: { name: 'Lalbagh Botanical Garden, Mavalli, Bengaluru', lat: 12.9507, lng: 77.5848 },
-    fareEstimate: 350.50,
+    customerName: 'Mr. Sterling',
+    pickupLocation: { name: 'Dubai Marina Yacht Club', lat: 25.0763, lng: 55.1384 },
+    destination: { name: 'Palm Jumeirah, Atlantis', lat: 25.1304, lng: 55.1171 },
+    fareEstimate: 3500.00,
   },
   {
-    customerName: 'Saanvi Gupta',
-    pickupLocation: { name: 'Select CITYWALK, Saket District Centre, New Delhi', lat: 28.5284, lng: 77.2190 },
-    destination: { name: 'Qutub Minar, Mehrauli, New Delhi', lat: 28.5245, lng: 77.1855 },
-    fareEstimate: 280.75,
+    customerName: 'The Al-Fahim Family',
+    pickupLocation: { name: 'Jumeirah Beach Hotel', lat: 25.1912, lng: 55.2341 },
+    destination: { name: 'Burj Al Arab', lat: 25.1412, lng: 55.1852 },
+    fareEstimate: 2800.75,
   },
   {
-    customerName: 'Vihaan Singh',
-    pickupLocation: { name: 'Nexus Mall, 6th Block, Koramangala, Bengaluru', lat: 12.9345, lng: 77.6370 },
-    destination: { name: 'UB City, Vittal Mallya Road, Bengaluru', lat: 12.9721, lng: 77.5946 },
-    fareEstimate: 180.00,
+    customerName: 'Ms. Anya Sharma',
+    pickupLocation: { name: 'One&Only The Palm', lat: 25.1132, lng: 55.1305 },
+    destination: { name: 'Ain Dubai', lat: 25.0799, lng: 55.1228 },
+    fareEstimate: 1800.00,
   },
   {
-    customerName: 'Myra Patel',
-    pickupLocation: { name: 'Express Avenue, Royapettah, Chennai', lat: 13.0594, lng: 80.2635 },
-    destination: { name: 'Marina Beach, Triplicane, Chennai', lat: 13.0505, lng: 80.2825 },
-    fareEstimate: 210.25,
+    customerName: 'Mr. Chen',
+    pickupLocation: { name: 'The Ritz-Carlton, Dubai', lat: 25.0845, lng: 55.1408 },
+    destination: { name: 'World Islands', lat: 25.2222, lng: 55.1715 },
+    fareEstimate: 5210.25,
   },
   {
-    customerName: 'Advik Kumar',
-    pickupLocation: { name: 'Howrah Bridge, Jagannath Ghat, Kolkata', lat: 22.5852, lng: 88.3458 },
-    destination: { name: 'Victoria Memorial, Queens Way, Kolkata', lat: 22.5448, lng: 88.3426 },
-    fareEstimate: 150.00,
+    customerName: 'The Knightsbridge Group',
+    pickupLocation: { name: 'Bulgari Yacht Club', lat: 25.1950, lng: 55.2415 },
+    destination: { name: 'Dubai Canal', lat: 25.1986, lng: 55.2589 },
+    fareEstimate: 4150.00,
   },
 ];
 
@@ -73,14 +73,12 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
 
         const potentialBookings = sampleBookings.filter(booking => {
             const pickupDistance = getDistanceInKm(driverLocation, booking.pickupLocation);
-            const tripDistance = getDistanceInKm(booking.pickupLocation, booking.destination);
-            // Ride is valid if pickup is within 20km and total trip is less than 50km
-            return pickupDistance < 20 && tripDistance < 50;
+            // Charters can be far, let's have a wider range
+            return pickupDistance < 50; 
         });
 
         if (potentialBookings.length === 0) {
-            // No suitable rides found, try again later
-            const randomDelay = Math.random() * 2000 + 1000; // 1-3 seconds
+            const randomDelay = Math.random() * 5000 + 3000; // 3-8 seconds
             timer = setTimeout(createNewBooking, randomDelay);
             return;
         }
@@ -101,8 +99,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
     };
 
     if (isAvailable && !bookingRequest && !hasActiveTrip && driverLocation) {
-      // Shorten the delay to get more frequent ride requests.
-      const randomDelay = Math.random() * 1000 + 500; // 0.5-1.5 seconds
+      const randomDelay = Math.random() * 3000 + 2000; // 2-5 seconds
       timer = setTimeout(createNewBooking, randomDelay);
     }
 

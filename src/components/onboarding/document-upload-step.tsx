@@ -54,11 +54,11 @@ export default function DocumentUploadStep({ onNext, onBack, updateFormData }: D
       
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FileUploadField id="rcFile" name="rcFile" label="RC Card" file={files.rcFile} onChange={handleChange} />
-            <FileUploadField id="licenseFile" name="licenseFile" label="Driving License" file={files.licenseFile} onChange={handleChange} />
-            <FileUploadField id="insuranceFile" name="insuranceFile" label="Insurance" file={files.insuranceFile} onChange={handleChange} />
-            <FileUploadField id="fitnessCertificateFile" name="fitnessCertificateFile" label="Fitness Certificate" file={files.fitnessCertificateFile} onChange={handleChange} />
-            <FileUploadField id="vehiclePhotoFile" name="vehiclePhotoFile" label="Vehicle Photo" file={files.vehiclePhotoFile} onChange={handleChange} />
+            <FileUploadField id="rcFile" name="rcFile" label="Registration Certificate" file={files.rcFile} onChange={handleChange} />
+            <FileUploadField id="licenseFile" name="licenseFile" label="Captain's License" file={files.licenseFile} onChange={handleChange} />
+            <FileUploadField id="insuranceFile" name="insuranceFile" label="Vessel Insurance" file={files.insuranceFile} onChange={handleChange} />
+            <FileUploadField id="fitnessCertificateFile" name="fitnessCertificateFile" label="Seaworthiness Certificate" file={files.fitnessCertificateFile} onChange={handleChange} />
+            <FileUploadField id="vehiclePhotoFile" name="vehiclePhotoFile" label="Vessel Photo" file={files.vehiclePhotoFile} onChange={handleChange} />
             <FileUploadField id="userPhotoFile" name="userPhotoFile" label="Your Photo" file={files.userPhotoFile} onChange={handleChange} isOptional />
         </div>
       </div>

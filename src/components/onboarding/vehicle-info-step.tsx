@@ -41,37 +41,37 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Vehicle Information</h2>
-      <p className="text-muted-foreground mb-6">Provide details about your vehicle.</p>
+      <h2 className="text-2xl font-bold mb-2">Vessel Information</h2>
+      <p className="text-muted-foreground mb-6">Provide details about your vessel.</p>
       
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-                <Label htmlFor="vehicleType">Vehicle Type</Label>
+                <Label htmlFor="vehicleType">Vessel Type</Label>
                 <Select name="vehicleType" value={formData.vehicleType} onValueChange={(value) => handleSelectChange('vehicleType', value)}>
                     <SelectTrigger id="vehicleType">
-                        <SelectValue placeholder="Select vehicle type" />
+                        <SelectValue placeholder="Select vessel type" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="car-sedan">Car (Sedan)</SelectItem>
-                        <SelectItem value="car-suv">Car (SUV)</SelectItem>
-                        <SelectItem value="car-hatchback">Car (Hatchback)</SelectItem>
-                        <SelectItem value="auto-rickshaw">Auto Rickshaw</SelectItem>
-                        <SelectItem value="bike">Bike</SelectItem>
+                        <SelectItem value="speedboat">Speedboat</SelectItem>
+                        <SelectItem value="yacht">Yacht</SelectItem>
+                        <SelectItem value="fishing-boat">Fishing Boat</SelectItem>
+                        <SelectItem value="jet-ski">Jet Ski</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
             <div className="space-y-2">
                 <Label htmlFor="vehicleModel">Model</Label>
-                <Input id="vehicleModel" name="vehicleModel" value={formData.vehicleModel} onChange={handleChange} placeholder="e.g. Maruti Swift" />
+                <Input id="vehicleModel" name="vehicleModel" value={formData.vehicleModel} onChange={handleChange} placeholder="e.g. Sea Ray 250" />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="vehicleColor">Color</Label>
                 <Input id="vehicleColor" name="vehicleColor" value={formData.vehicleColor} onChange={handleChange} placeholder="e.g. White" />
             </div>
              <div className="space-y-2">
-                <Label htmlFor="vehicleNumber">Vehicle Number</Label>
-                <Input id="vehicleNumber" name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange} placeholder="e.g. KA 01 AB 1234" />
+                <Label htmlFor="vehicleNumber">Registration Number</Label>
+                <Input id="vehicleNumber" name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange} placeholder="e.g. DL1234AB" />
             </div>
         </div>
       </div>
