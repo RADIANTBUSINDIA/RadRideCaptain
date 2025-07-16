@@ -153,7 +153,7 @@ export default function DriverDashboard() {
                         ) : (
                         <>
                             <LoaderCircle className="w-16 h-16 animate-spin text-primary" />
-                            <h2 className="text-2xl font-semibold">Searching for Charters...</h2>
+                            <h2 className="text-2xl font-semibold">Looking for a ride...</h2>
                             <p>You'll be notified when a new request comes in.</p>
                         </>
                         )}
