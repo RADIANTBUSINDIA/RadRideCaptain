@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { User, MapPin, Navigation, Pin } from "lucide-react";
 import Link from "next/link";
-import RouteOptimizer from "./route-optimizer";
 import type { TripStage } from "./driver-dashboard";
 
 interface TripInfoProps {
@@ -55,7 +54,6 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
           case 'TRIP_IN_PROGRESS':
               return (
                   <>
-                      <RouteOptimizer trip={trip} />
                       <Button variant="destructive" className="w-full" onClick={onEndTrip}>End Trip</Button>
                   </>
               );
@@ -100,7 +98,7 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
             <MapPin className="w-4 h-4 text-red-500" /> 
             Destination
           </div>
-          <p className="pl-6 text-sm">{trip.destination.name}</p>
+          p className="pl-6 text-sm">{trip.destination.name}</p>
         </div>
 
         {tripStage === 'AWAITING_PIN' && (
@@ -108,7 +106,6 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
                 <Pin className="mx-auto h-8 w-8 text-primary mb-2"/>
                 <p className="font-semibold">Enter the 4-digit PIN</p>
                 <p className="text-sm text-muted-foreground">Ask the rider for their PIN to start the trip.</p>
-                <p className="text-sm text-muted-foreground mt-2">PIN for testing: <strong className="text-foreground">{trip.riderPin}</strong></p>
             </div>
         )}
       </CardContent>
