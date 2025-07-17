@@ -17,7 +17,7 @@ interface DriverProfileData {
 }
 
 const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | null }) => (
-    <div className="flex items-center gap-4 py-3 border-b">
+    <div className="flex items-center gap-4 py-3 border-b last:border-b-0">
         <Icon className="w-5 h-5 text-primary" />
         <div className="flex-1">
             <p className="text-xs text-muted-foreground">{label}</p>
@@ -65,13 +65,13 @@ export default function DriverProfile() {
     return (
         <div className="space-y-6 pr-4">
             <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center text-lg">
-                        <User className="w-5 h-5 mr-3 text-primary"/>
+                <CardHeader className="p-4">
+                    <CardTitle className="flex items-center text-base">
+                        <User className="w-4 h-4 mr-2 text-primary"/>
                         Personal Information
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 pt-0">
                     <InfoItem icon={User} label="Full Name" value={profile.name} />
                     <InfoItem icon={Mail} label="Email" value={profile.email} />
                     <InfoItem icon={Phone} label="Phone Number" value={profile.phone} />
@@ -79,13 +79,13 @@ export default function DriverProfile() {
             </Card>
 
             <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center text-lg">
-                        <Car className="w-5 h-5 mr-3 text-primary"/>
+                <CardHeader className="p-4">
+                    <CardTitle className="flex items-center text-base">
+                        <Car className="w-4 h-4 mr-2 text-primary"/>
                         Vehicle Details
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 pt-0">
                     <InfoItem icon={Car} label="Vehicle Type" value={profile.vehicleType} />
                     <InfoItem icon={Car} label="Model" value={profile.vehicleModel} />
                     <InfoItem icon={Car} label="Color" value={profile.vehicleColor} />

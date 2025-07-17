@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -38,7 +38,6 @@ export default function DriverDashboard() {
       setAcceptedTrip(bookingRequest);
       setTripStage('DRIVING_TO_PICKUP');
 
-      // Cache the trip details in localStorage
       try {
         const tripToCache = {
             pickupLocation: bookingRequest.pickupLocation,
@@ -105,7 +104,6 @@ export default function DriverDashboard() {
   };
 
   const handlePinVerified = () => {
-    // For testing, just accept any 4 digit pin
     setTripStage('TRIP_IN_PROGRESS');
     toast({
         title: "PIN Verified!",
