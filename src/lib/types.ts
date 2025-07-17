@@ -10,6 +10,8 @@ export interface BookingRequest {
   pickupLocation: Location;
   destination: Location;
   fareEstimate: number;
+  estimatedTime: number; // in minutes
+  distance: number; // in km
   riderPin: string;
 }
 

@@ -106,6 +106,7 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
 
       // Estimate fare based on a simple distance calculation
       const fareEstimate = 50 + (pickupToDropoffDistance * 15); // Base fare + per km charge
+      const estimatedTime = Math.round((pickupToDropoffDistance / 25) * 60); // Assuming average speed of 25 km/h
 
       if (!isCancelled) {
         setBookingRequest({
@@ -114,6 +115,8 @@ export function useBookingSimulation(isAvailable: boolean, hasActiveTrip: boolea
             pickupLocation,
             destination,
             fareEstimate: parseFloat(fareEstimate.toFixed(2)),
+            estimatedTime,
+            distance: parseFloat(pickupToDropoffDistance.toFixed(1)),
             riderPin: String(Math.floor(1000 + Math.random() * 9000)),
         });
 
