@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -41,7 +42,7 @@ export default function FinalStatusStep({ formData }: FinalStatusStepProps) {
                 // Wait a bit after showing approved status then redirect
                 setTimeout(() => {
                     router.push("/dashboard");
-                }, 1500); 
+                }, 5000); 
 
             } else {
                 console.error("Submission error:", result.error);

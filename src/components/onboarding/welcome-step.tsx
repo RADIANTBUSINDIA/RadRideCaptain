@@ -21,30 +21,30 @@ interface WelcomeStepProps {
 const welcomeSlides = [
   {
     image: {
-      src: "https://images.unsplash.com/photo-1593181821899-de47a7d4a67e?q=80&w=600&h=400&fit=crop",
-      alt: "A view from the deck of a modern speedboat cutting through the water.",
-      hint: "speedboat ocean",
+      src: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600&h=400&fit=crop",
+      alt: "A yellow sports car parked on the street.",
+      hint: "sports car street",
     },
     title: "Welcome Aboard, RadCaptian",
-    description: "Your journey as a captain starts here. Let's get you set up to start earning on the water.",
+    description: "Your journey as a driver starts here. Let's get you set up to start earning on the road.",
   },
   {
     image: {
-      src: "https://images.unsplash.com/photo-1617124998790-ab64191140a3?q=80&w=600&h=400&fit=crop",
-      alt: "A person confidently steering a boat.",
-      hint: "person steering boat",
+      src: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600&h=400&fit=crop",
+      alt: "A person confidently driving a car on an open road.",
+      hint: "person driving car",
     },
-    title: "Chart Your Own Course",
-    description: "Enjoy the freedom of being your own boss. Sail when you want, and navigate your own success.",
+    title: "Drive Your Own Course",
+    description: "Enjoy the freedom of being your own boss. Drive when you want, and navigate your own success.",
   },
   {
     image: {
-      src: "https://images.unsplash.com/photo-1541690039987-a0027b13e790?q=80&w=600&h=400&fit=crop",
-      alt: "A beautiful tropical island seen from the water, representing a desirable destination.",
-      hint: "tropical island",
+      src: "https://images.unsplash.com/photo-1614026480424-a2126a31d2b2?q=80&w=600&h=400&fit=crop",
+      alt: "A modern car dashboard with a navigation system.",
+      hint: "car dashboard navigation",
     },
     title: "Premium Tools for a Premium Service",
-    description: "From smart navigation to seamless bookings, we provide the tools you need for every voyage.",
+    description: "From smart navigation to seamless bookings, we provide the tools you need for every trip.",
   },
 ];
 
@@ -107,7 +107,7 @@ export default function WelcomeStep({ onNext }: WelcomeStepProps) {
       {current === count && (
         <div className="mt-4 flex flex-col items-center">
           <Button onClick={onNext} size="lg" className="bg-accent hover:bg-accent/90 w-full max-w-xs">
-            Continue as Captain
+            Continue as Driver
           </Button>
         </div>
       )}

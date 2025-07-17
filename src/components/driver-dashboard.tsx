@@ -5,8 +5,7 @@ import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { WifiOff, LoaderCircle } from "lucide-react";
-import { FaSailboat } from "react-icons/fa6";
+import { WifiOff, LoaderCircle, Car } from "lucide-react";
 import { useBookingSimulation } from "@/hooks/use-booking-simulation";
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
@@ -122,7 +121,7 @@ export default function DriverDashboard() {
     <div className="flex flex-col h-screen">
       <header className="flex items-center justify-between p-4 border-b bg-card">
         <div className="flex items-center gap-2">
-          <FaSailboat className="h-8 w-8 text-primary" />
+          <Car className="h-8 w-8 text-primary" />
           <h1 className="text-2xl font-bold">RadCaptian</h1>
         </div>
         <div className="flex items-center space-x-2">

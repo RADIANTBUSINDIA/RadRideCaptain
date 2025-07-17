@@ -1,11 +1,10 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Upload } from "lucide-react";
-
 
 interface VehicleInfoStepProps {
   onNext: () => void;
@@ -17,12 +16,8 @@ interface VehicleInfoStepProps {
 export default function VehicleInfoStep({ onNext, onBack, updateFormData, formData }: VehicleInfoStepProps) {
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, files } = e.target;
-    if (files && files.length > 0) {
-      updateFormData({ [name]: files[0] });
-    } else {
-      updateFormData({ [name]: value });
-    }
+    const { name, value } = e.target;
+    updateFormData({ [name]: value });
   };
 
   const handleSelectChange = (name: string, value: string) => {
@@ -41,29 +36,29 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Vessel Information</h2>
-      <p className="text-muted-foreground mb-6">Provide details about your vessel.</p>
+      <h2 className="text-2xl font-bold mb-2">Vehicle Information</h2>
+      <p className="text-muted-foreground mb-6">Provide details about your car.</p>
       
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-                <Label htmlFor="vehicleType">Vessel Type</Label>
+                <Label htmlFor="vehicleType">Vehicle Type</Label>
                 <Select name="vehicleType" value={formData.vehicleType} onValueChange={(value) => handleSelectChange('vehicleType', value)}>
                     <SelectTrigger id="vehicleType">
-                        <SelectValue placeholder="Select vessel type" />
+                        <SelectValue placeholder="Select vehicle type" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="speedboat">Speedboat</SelectItem>
-                        <SelectItem value="yacht">Yacht</SelectItem>
-                        <SelectItem value="fishing-boat">Fishing Boat</SelectItem>
-                        <SelectItem value="jet-ski">Jet Ski</SelectItem>
+                        <SelectItem value="sedan">Sedan</SelectItem>
+                        <SelectItem value="suv">SUV</SelectItem>
+                        <SelectItem value="hatchback">Hatchback</SelectItem>
+                        <SelectItem value="convertible">Convertible</SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
             <div className="space-y-2">
                 <Label htmlFor="vehicleModel">Model</Label>
-                <Input id="vehicleModel" name="vehicleModel" value={formData.vehicleModel} onChange={handleChange} placeholder="e.g. Sea Ray 250" />
+                <Input id="vehicleModel" name="vehicleModel" value={formData.vehicleModel} onChange={handleChange} placeholder="e.g. Honda City" />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="vehicleColor">Color</Label>
@@ -71,7 +66,7 @@ export default function VehicleInfoStep({ onNext, onBack, updateFormData, formDa
             </div>
              <div className="space-y-2">
                 <Label htmlFor="vehicleNumber">Registration Number</Label>
-                <Input id="vehicleNumber" name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange} placeholder="e.g. DL1234AB" />
+                <Input id="vehicleNumber" name="vehicleNumber" value={formData.vehicleNumber} onChange={handleChange} placeholder="e.g. KA 01 AB 1234" />
             </div>
         </div>
       </div>

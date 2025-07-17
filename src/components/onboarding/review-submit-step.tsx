@@ -4,7 +4,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, File, User, Car } from "lucide-react";
-import { FaSailboat } from "react-icons/fa6";
 
 interface ReviewSubmitStepProps {
   onNext: () => void;
@@ -56,10 +55,10 @@ export default function ReviewSubmitStep({ onNext, onBack, formData }: ReviewSub
 
         <Card>
             <CardHeader>
-                <CardTitle className="flex items-center text-lg"><FaSailboat className="w-5 h-5 mr-3 text-primary"/>Vessel Information</CardTitle>
+                <CardTitle className="flex items-center text-lg"><Car className="w-5 h-5 mr-3 text-primary"/>Vehicle Information</CardTitle>
             </CardHeader>
             <CardContent>
-                <InfoItem label="Vessel Type" value={formData.vehicleType} />
+                <InfoItem label="Vehicle Type" value={formData.vehicleType} />
                 <InfoItem label="Model" value={formData.vehicleModel} />
                 <InfoItem label="Color" value={formData.vehicleColor} />
                 <InfoItem label="Registration Number" value={formData.vehicleNumber} />
@@ -75,7 +74,7 @@ export default function ReviewSubmitStep({ onNext, onBack, formData }: ReviewSub
                 <FileItem label="Driving License" file={formData.licenseFile} isOptional />
                 <FileItem label="Insurance" file={formData.insuranceFile} isOptional />
                 <FileItem label="Fitness Certificate" file={formData.fitnessCertificateFile} isOptional />
-                <FileItem label="Vessel Photo" file={formData.vehiclePhotoFile} isOptional />
+                <FileItem label="Vehicle Photo" file={formData.vehiclePhotoFile} isOptional />
                 <FileItem label="Your Photo" file={formData.userPhotoFile} isOptional />
             </CardContent>
         </Card>
