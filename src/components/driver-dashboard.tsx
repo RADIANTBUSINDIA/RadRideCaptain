@@ -2,10 +2,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { WifiOff, LoaderCircle, Car } from "lucide-react";
+import { WifiOff, LoaderCircle, Car, LogOut } from "lucide-react";
 import { useBookingSimulation } from "@/hooks/use-booking-simulation";
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
@@ -15,6 +16,7 @@ import TripInfo from "./trip-info";
 import PinEntryDialog from "./pin-entry-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useGeolocation } from "@/hooks/use-geolocation";
+import { Button } from "./ui/button";
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
 
@@ -27,6 +29,7 @@ export default function DriverDashboard() {
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const { toast } = useToast();
   const { currentLocation } = useGeolocation();
+  const router = useRouter();
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
   
@@ -102,6 +105,7 @@ export default function DriverDashboard() {
   };
 
   const handlePinVerified = () => {
+    // For testing, just accept any 4 digit pin
     setTripStage('TRIP_IN_PROGRESS');
     toast({
         title: "PIN Verified!",
@@ -117,23 +121,33 @@ export default function DriverDashboard() {
     });
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push('/');
+  }
+
   return (
-    <div className="flex flex-col h-screen">
-      <header className="flex items-center justify-between p-4 border-b bg-card">
+    <div className="flex flex-col h-screen bg-gray-50">
+      <header className="flex items-center justify-between p-4 border-b bg-card shadow-sm">
         <div className="flex items-center gap-2">
           <Car className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-bold">RadCaptian</h1>
+          <h1 className="text-2xl font-bold tracking-tight">RadCaptian</h1>
         </div>
-        <div className="flex items-center space-x-2">
-          <Label htmlFor="availability-toggle" className={isAvailable ? "text-primary font-semibold" : ""}>
-            {isAvailable ? "Online" : "Offline"}
-          </Label>
-          <Switch
-            id="availability-toggle"
-            checked={isAvailable}
-            onCheckedChange={handleAvailabilityChange}
-            disabled={!!acceptedTrip}
-          />
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <Label htmlFor="availability-toggle" className={isAvailable ? "text-primary font-semibold" : "text-muted-foreground"}>
+              {isAvailable ? "Online" : "Offline"}
+            </Label>
+            <Switch
+              id="availability-toggle"
+              checked={isAvailable}
+              onCheckedChange={handleAvailabilityChange}
+              disabled={!!acceptedTrip}
+            />
+          </div>
+          <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Logout">
+              <LogOut className="h-5 w-5" />
+          </Button>
         </div>
       </header>
 
@@ -162,7 +176,7 @@ export default function DriverDashboard() {
                   driverLocation={currentLocation} 
                 />
             ) : (
-                <Card className="h-full flex items-center justify-center">
+                <Card className="h-full flex items-center justify-center border-dashed">
                     <CardContent className="p-0">
                     <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
                         {!isAvailable ? (

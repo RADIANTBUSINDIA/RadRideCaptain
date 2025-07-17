@@ -83,7 +83,7 @@ export default function PinEntryDialog({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleVerify} disabled={pin.length !== 4}>
+          <Button onClick={handleVerify} disabled={pin.length !== 4} className="bg-accent hover:bg-accent/90">
             Start Trip
           </Button>
         </DialogFooter>
