@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -43,8 +44,9 @@ export default function DocumentUploadStep({ onNext, onBack, updateFormData }: D
     }
   };
 
+  // All fields are optional, so the button should always be enabled.
   const isFormValid = () => {
-    return files.rcFile && files.licenseFile && files.insuranceFile && files.fitnessCertificateFile && files.vehiclePhotoFile;
+    return true;
   };
 
   return (
@@ -54,11 +56,11 @@ export default function DocumentUploadStep({ onNext, onBack, updateFormData }: D
       
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FileUploadField id="rcFile" name="rcFile" label="Registration Certificate" file={files.rcFile} onChange={handleChange} />
-            <FileUploadField id="licenseFile" name="licenseFile" label="Captain's License" file={files.licenseFile} onChange={handleChange} />
-            <FileUploadField id="insuranceFile" name="insuranceFile" label="Vessel Insurance" file={files.insuranceFile} onChange={handleChange} />
-            <FileUploadField id="fitnessCertificateFile" name="fitnessCertificateFile" label="Seaworthiness Certificate" file={files.fitnessCertificateFile} onChange={handleChange} />
-            <FileUploadField id="vehiclePhotoFile" name="vehiclePhotoFile" label="Vessel Photo" file={files.vehiclePhotoFile} onChange={handleChange} />
+            <FileUploadField id="rcFile" name="rcFile" label="Registration Certificate" file={files.rcFile} onChange={handleChange} isOptional />
+            <FileUploadField id="licenseFile" name="licenseFile" label="Captain's License" file={files.licenseFile} onChange={handleChange} isOptional />
+            <FileUploadField id="insuranceFile" name="insuranceFile" label="Vessel Insurance" file={files.insuranceFile} onChange={handleChange} isOptional />
+            <FileUploadField id="fitnessCertificateFile" name="fitnessCertificateFile" label="Seaworthiness Certificate" file={files.fitnessCertificateFile} onChange={handleChange} isOptional />
+            <FileUploadField id="vehiclePhotoFile" name="vehiclePhotoFile" label="Vessel Photo" file={files.vehiclePhotoFile} onChange={handleChange} isOptional />
             <FileUploadField id="userPhotoFile" name="userPhotoFile" label="Your Photo" file={files.userPhotoFile} onChange={handleChange} isOptional />
         </div>
       </div>

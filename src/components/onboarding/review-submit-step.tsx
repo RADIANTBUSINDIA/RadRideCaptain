@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,7 @@ const FileItem = ({ label, file, isOptional = false }: { label: string, file: Fi
                 {file.name}
             </span>
         ) : (
-             !isOptional && <p className="text-sm font-medium text-red-500">Not uploaded</p>
+             <p className="text-sm text-muted-foreground">Not uploaded</p>
         )}
     </div>
 )
@@ -70,11 +71,11 @@ export default function ReviewSubmitStep({ onNext, onBack, formData }: ReviewSub
                 <CardTitle className="flex items-center text-lg"><File className="w-5 h-5 mr-3 text-primary"/>Documents</CardTitle>
             </CardHeader>
             <CardContent>
-                <FileItem label="RC Card" file={formData.rcFile} />
-                <FileItem label="Driving License" file={formData.licenseFile} />
-                <FileItem label="Insurance" file={formData.insuranceFile} />
-                <FileItem label="Fitness Certificate" file={formData.fitnessCertificateFile} />
-                <FileItem label="Vessel Photo" file={formData.vehiclePhotoFile} />
+                <FileItem label="RC Card" file={formData.rcFile} isOptional />
+                <FileItem label="Driving License" file={formData.licenseFile} isOptional />
+                <FileItem label="Insurance" file={formData.insuranceFile} isOptional />
+                <FileItem label="Fitness Certificate" file={formData.fitnessCertificateFile} isOptional />
+                <FileItem label="Vessel Photo" file={formData.vehiclePhotoFile} isOptional />
                 <FileItem label="Your Photo" file={formData.userPhotoFile} isOptional />
             </CardContent>
         </Card>
