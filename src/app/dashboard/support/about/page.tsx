@@ -8,7 +8,7 @@ export default function AboutPage() {
         <CardHeader>
             <CardTitle className="flex items-center gap-2">
                 <Building2 className="h-5 w-5 text-primary" />
-                About RadCaptian
+                About Rad RideCaptain
             </CardTitle>
             <CardDescription>
                 Information about the company and the app.

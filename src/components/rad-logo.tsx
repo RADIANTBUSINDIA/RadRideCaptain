@@ -8,7 +8,7 @@ export default function RadLogo() {
              <Car className="h-8 w-8" />
         </div>
         <div className="text-center">
-             <p className="font-bold text-sm tracking-wider">DriverSidekick</p>
+             <p className="font-bold text-sm tracking-wider">Rad RideCaptain</p>
              <p className="text-xs text-muted-foreground">v1.0.0</p>
         </div>
     </div>
