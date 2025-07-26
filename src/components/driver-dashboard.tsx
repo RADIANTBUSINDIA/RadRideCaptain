@@ -174,7 +174,11 @@ export default function DriverDashboard() {
                   onEndTrip={handleEndTrip} 
                 />
              ) : (
-                <DriverStats tripHistory={tripHistory} />
+                <Card className="h-full flex items-center justify-center bg-muted/50">
+                    <CardContent className="text-center text-muted-foreground">
+                        <p>Your trip information will appear here once you accept a ride.</p>
+                    </CardContent>
+                </Card>
              )}
         </div>
       </div>
