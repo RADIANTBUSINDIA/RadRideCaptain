@@ -118,7 +118,7 @@ export default function DriverDashboard() {
             </CardHeader>
         </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-5">
+      <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-5">
         {bookingRequest && (
           <BookingAlert
             bookingRequest={bookingRequest}
@@ -135,7 +135,7 @@ export default function DriverDashboard() {
             />
         )}
         
-        <div className="lg:col-span-3 h-[60vh]">
+        <div className="md:col-span-3 h-[60vh] md:h-auto">
             {acceptedTrip && tripStage ? (
                 <MapView 
                   trip={acceptedTrip} 
@@ -164,7 +164,7 @@ export default function DriverDashboard() {
                 </Card>
             )}
         </div>
-        <div className="lg:col-span-2 h-[60vh]">
+        <div className="md:col-span-2 h-auto">
              {acceptedTrip && tripStage && (
                 <TripInfo 
                   trip={acceptedTrip} 
