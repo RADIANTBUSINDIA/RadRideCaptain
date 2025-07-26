@@ -63,7 +63,7 @@ export default function DriverProfile() {
     }
 
     return (
-        <div className="space-y-6 pr-4">
+        <div className="space-y-6">
             <Card>
                 <CardHeader className="p-4">
                     <CardTitle className="flex items-center text-base">
