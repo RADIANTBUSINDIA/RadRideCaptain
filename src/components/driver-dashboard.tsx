@@ -165,13 +165,15 @@ export default function DriverDashboard() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="md:col-span-2 h-auto">
-                    <div className="h-full rounded-lg border text-card-foreground shadow-sm flex items-center justify-center bg-muted/50">
-                        <div className="p-6 pt-0 text-center text-muted-foreground">
-                            <p>Your trip information will appear here once you accept a ride.</p>
-                        </div>
-                    </div>
-                </div>
+                {isAvailable && (
+                  <div className="md:col-span-2 h-auto">
+                      <div className="h-full rounded-lg border text-card-foreground shadow-sm flex items-center justify-center bg-muted/50">
+                          <div className="p-6 pt-0 text-center text-muted-foreground">
+                              <p>Your trip information will appear here once you accept a ride.</p>
+                          </div>
+                      </div>
+                  </div>
+                )}
             </>
         )}
       </div>
