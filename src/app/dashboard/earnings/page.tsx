@@ -138,7 +138,7 @@ export default function EarningsPage() {
                     </Card>
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Online Hours</_CardTitle>
+                            <CardTitle className="text-sm font-medium">Online Hours</CardTitle>
                             <Clock className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent><div className="text-2xl font-bold">180.5h</div></CardContent>
@@ -229,7 +229,7 @@ export default function EarningsPage() {
                                 <TableCell>{payout.date}</TableCell>
                                 <TableCell>{payout.amount}</TableCell>
                                 <TableCell>
-                                    <Badge variant={payout.status === 'Completed' ? 'default' : 'secondary'} className={payout.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+                                    <Badge variant={payout.status === 'completed' ? 'default' : 'secondary'} className={payout.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
                                         {payout.status}
                                     </Badge>
                                 </TableCell>
