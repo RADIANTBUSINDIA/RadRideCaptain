@@ -165,7 +165,7 @@ export default function DriverDashboard() {
             )}
         </div>
         <div className="lg:col-span-2 h-[60vh]">
-             {acceptedTrip && tripStage ? (
+             {acceptedTrip && tripStage && (
                 <TripInfo 
                   trip={acceptedTrip} 
                   tripStage={tripStage}
@@ -173,12 +173,6 @@ export default function DriverDashboard() {
                   onArrived={handleArrived}
                   onEndTrip={handleEndTrip} 
                 />
-             ) : (
-                <Card className="h-full flex items-center justify-center bg-muted/50">
-                    <CardContent className="text-center text-muted-foreground">
-                        <p>Your trip information will appear here once you accept a ride.</p>
-                    </CardContent>
-                </Card>
              )}
         </div>
       </div>
