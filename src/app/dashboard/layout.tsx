@@ -6,10 +6,12 @@ import { usePathname } from 'next/navigation';
 import SideNav from '@/components/side-nav';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Car } from 'lucide-react';
+import { Menu, Car, LoaderCircle } from 'lucide-react';
 import RadLogo from '@/components/rad-logo';
 import { TripProvider } from '@/context/trip-context';
 import { cn } from '@/lib/utils';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export default function DashboardLayout({
   children,
@@ -18,6 +20,9 @@ export default function DashboardLayout({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [hasActiveTrip, setHasActiveTrip] = useState(false);
+
 
   const getPageTitle = (path: string) => {
     const parts = path.split('/').filter(Boolean);
@@ -27,6 +32,17 @@ export default function DashboardLayout({
   };
   
   const pageTitle = useMemo(() => getPageTitle(pathname), [pathname]);
+
+  const childrenWithProps = React.Children.map(children, child => {
+    if (React.isValidElement(child)) {
+        return React.cloneElement(child, { 
+            isAvailable, 
+            setIsAvailable,
+            setHasActiveTrip
+        } as any);
+    }
+    return child;
+});
 
   return (
     <TripProvider>
@@ -42,19 +58,33 @@ export default function DashboardLayout({
             </SheetContent>
           
           <div className="flex flex-col w-full">
-            <header className="sticky top-0 z-30 flex h-16 items-center gap-4 bg-primary text-primary-foreground px-4 sm:px-6">
-                <SheetTrigger asChild>
-                    <Button size="icon" variant="ghost" className="md:flex hover:bg-primary/90 hover:text-primary-foreground -ml-2">
-                        <Menu className="h-6 w-6" />
-                        <span className="sr-only">Toggle Menu</span>
-                    </Button>
-                </SheetTrigger>
-                <div className="flex items-center gap-2">
-                    <h1 className="text-xl font-semibold tracking-tight">{pageTitle}</h1>
+            <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 bg-primary text-primary-foreground px-4 sm:px-6">
+                <div className="flex items-center gap-4">
+                    <SheetTrigger asChild>
+                        <Button size="icon" variant="ghost" className="md:flex hover:bg-primary/90 hover:text-primary-foreground -ml-2">
+                            <Menu className="h-6 w-6" />
+                            <span className="sr-only">Toggle Menu</span>
+                        </Button>
+                    </SheetTrigger>
+                    <div className="flex items-center gap-2">
+                        <h1 className="text-xl font-semibold tracking-tight">{pageTitle}</h1>
+                    </div>
+                </div>
+                 <div className="flex items-center space-x-2">
+                    {isAvailable && !hasActiveTrip && <LoaderCircle className="w-5 h-5 animate-spin" />}
+                    <Label htmlFor="availability-toggle" className="font-semibold">
+                        {isAvailable ? "Online" : "Offline"}
+                    </Label>
+                    <Switch
+                        id="availability-toggle"
+                        checked={isAvailable}
+                        onCheckedChange={setIsAvailable}
+                        disabled={hasActiveTrip}
+                    />
                 </div>
             </header>
             <main className="flex-1 overflow-auto p-4 sm:px-6 sm:py-6">
-                {children}
+                {childrenWithProps}
             </main>
           </div>
         </div>

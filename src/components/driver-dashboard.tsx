@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WifiOff, LoaderCircle } from "lucide-react";
+import { WifiOff, Search } from "lucide-react";
 import { useBookingSimulation } from "@/hooks/use-booking-simulation";
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
@@ -18,8 +18,13 @@ import { useTripContext } from "@/context/trip-context";
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
 
-export default function DriverDashboard() {
-  const [isAvailable, setIsAvailable] = useState(false);
+interface DriverDashboardProps {
+    isAvailable: boolean;
+    setIsAvailable: (isAvailable: boolean) => void;
+    setHasActiveTrip: (hasActiveTrip: boolean) => void;
+}
+
+export default function DriverDashboard({ isAvailable, setIsAvailable, setHasActiveTrip }: DriverDashboardProps) {
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
   const [tripStage, setTripStage] = useState<TripStage | null>(null);
   const { toast } = useToast();
@@ -27,6 +32,11 @@ export default function DriverDashboard() {
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
   
+  useEffect(() => {
+    setHasActiveTrip(!!acceptedTrip);
+  }, [acceptedTrip, setHasActiveTrip]);
+
+
   const handleAccept = () => {
     if (bookingRequest) {
       setAcceptedTrip(bookingRequest);
@@ -99,24 +109,7 @@ export default function DriverDashboard() {
 
   return (
     <div className="flex flex-col gap-4 md:gap-8">
-       <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Your Status</CardTitle>
-                 <div className="flex items-center space-x-2">
-                    <Label htmlFor="availability-toggle" className={isAvailable ? "text-primary font-semibold" : "text-muted-foreground"}>
-                    {isAvailable ? "Online" : "Offline"}
-                    </Label>
-                    <Switch
-                    id="availability-toggle"
-                    checked={isAvailable}
-                    onCheckedChange={handleAvailabilityChange}
-                    disabled={!!acceptedTrip}
-                    />
-                </div>
-            </CardHeader>
-        </Card>
-
-      <div className="grid gap-4 md:gap-8 grid-cols-1">
+      
         {bookingRequest && (
           <BookingAlert
             bookingRequest={bookingRequest}
@@ -143,20 +136,20 @@ export default function DriverDashboard() {
                 />
              </div>
             ) : (
-                <div className="h-[60vh] md:h-auto">
-                    <Card className="h-full flex items-center justify-center border-dashed">
+                <div className="h-auto">
+                    <Card className="h-full flex items-center justify-center border-dashed min-h-[200px]">
                         <CardContent className="p-0">
                         <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
                             {!isAvailable ? (
                             <>
                                 <WifiOff className="w-16 h-16" />
                                 <h2 className="text-2xl font-semibold">You Are Offline</h2>
-                                <p>Toggle the switch to go online and receive requests.</p>
+                                <p>Toggle the switch in the header to go online.</p>
                             </>
                             ) : (
                             <>
-                                <LoaderCircle className="w-16 h-16 animate-spin text-primary" />
-                                <h2 className="text-2xl font-semibold">Looking for a ride...</h2>
+                                <Search className="w-16 h-16" />
+                                <h2 className="text-2xl font-semibold">Searching for Rides</h2>
                                 <p>You'll be notified when a new request comes in.</p>
                             </>
                             )}
@@ -165,7 +158,6 @@ export default function DriverDashboard() {
                     </Card>
                 </div>
         )}
-      </div>
       <div className="grid gap-4 md:gap-8">
         <DriverStats tripHistory={tripHistory} />
       </div>
