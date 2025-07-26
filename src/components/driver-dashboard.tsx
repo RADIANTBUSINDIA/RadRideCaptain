@@ -11,10 +11,8 @@ import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
 import PinEntryDialog from "./pin-entry-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { useGeolocation } from "@/hooks/use-geolocation";
 import DriverStats from "./driver-stats";
 import TripInfo from "./trip-info";
-import MapView from "./map-view";
 
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
@@ -25,9 +23,8 @@ export default function DriverDashboard() {
   const [tripStage, setTripStage] = useState<TripStage | null>(null);
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const { toast } = useToast();
-  const { currentLocation } = useGeolocation();
 
-  const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
+  const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
   
   const handleAccept = () => {
     if (bookingRequest) {
@@ -137,11 +134,12 @@ export default function DriverDashboard() {
         
         <div className="md:col-span-3 h-[60vh] md:h-auto">
             {acceptedTrip && tripStage ? (
-                <MapView 
-                  trip={acceptedTrip} 
-                  tripStage={tripStage}
-                  driverLocation={currentLocation} 
-                />
+                <Card className="h-full flex items-center justify-center border-dashed">
+                    <CardContent className="p-0 text-center">
+                        <h2 className="text-2xl font-semibold">Trip Active</h2>
+                        <p className="text-muted-foreground">Trip details are shown on the right.</p>
+                    </CardContent>
+                </Card>
             ) : (
                 <Card className="h-full flex items-center justify-center border-dashed">
                     <CardContent className="p-0">
@@ -165,14 +163,19 @@ export default function DriverDashboard() {
             )}
         </div>
         <div className="md:col-span-2 h-auto">
-             {acceptedTrip && tripStage && (
+             {acceptedTrip && tripStage ? (
                 <TripInfo 
                   trip={acceptedTrip} 
                   tripStage={tripStage}
-                  driverLocation={currentLocation}
                   onArrived={handleArrived}
                   onEndTrip={handleEndTrip} 
                 />
+             ): (
+              <div className="h-full rounded-lg border text-card-foreground shadow-sm flex items-center justify-center bg-muted/50">
+                <div className="p-6 pt-0 text-center text-muted-foreground">
+                  <p>Your trip information will appear here once you accept a ride.</p>
+                </div>
+              </div>
              )}
         </div>
       </div>

@@ -64,14 +64,14 @@ export default function BookingAlert({
                 <MapPin className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
                 <div className="flex-1">
                   <span className="font-medium">From:</span>
-                  <p className="text-sm">{bookingRequest.pickupLocation.name}</p>
+                  <p className="text-sm">{bookingRequest.pickupLocation}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <MapPin className="w-5 h-5 text-red-500 mt-1 flex-shrink-0" />
                 <div className="flex-1">
                   <span className="font-medium">To:</span>
-                  <p className="text-sm">{bookingRequest.destination.name}</p>
+                  <p className="text-sm">{bookingRequest.destination}</p>
                 </div>
               </div>
           </div>

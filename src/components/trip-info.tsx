@@ -1,41 +1,20 @@
 
 "use client";
 
-import type { BookingRequest, Location } from "@/lib/types";
+import type { BookingRequest } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { User, MapPin, Navigation, Pin } from "lucide-react";
-import Link from "next/link";
 import type { TripStage } from "./driver-dashboard";
 
 interface TripInfoProps {
   trip: BookingRequest;
   tripStage: TripStage;
-  driverLocation: Location | null;
   onArrived: () => void;
   onEndTrip: () => void;
 }
 
-export default function TripInfo({ trip, tripStage, driverLocation, onArrived, onEndTrip }: TripInfoProps) {
-
-  const getGoogleMapsUrl = () => {
-    if (!trip) return '#';
-
-    const { pickupLocation, destination } = trip;
-    let url = 'https://www.google.com/maps/dir/?api=1&travelmode=driving';
-
-    if (tripStage === 'DRIVING_TO_PICKUP' && driverLocation) {
-        url += `&origin=${driverLocation.lat},${driverLocation.lng}&destination=${pickupLocation.lat},${pickupLocation.lng}`;
-    } else if (tripStage === 'TRIP_IN_PROGRESS') {
-        url += `&origin=${pickupLocation.lat},${pickupLocation.lng}&destination=${destination.lat},${destination.lng}`;
-    } else {
-        return '#'; // Not enough info to generate a link
-    }
-    
-    return url;
-  };
-
-  const googleMapsUrl = getGoogleMapsUrl();
+export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: TripInfoProps) {
 
   const renderCardTitle = () => {
       switch (tripStage) {
@@ -89,11 +68,11 @@ export default function TripInfo({ trip, tripStage, driverLocation, onArrived, o
                 <CardDescription>{renderCardDescription()}</CardDescription>
             </div>
             {tripStage !== 'AWAITING_PIN' && (
-              <Button asChild variant="outline" size="icon" disabled={googleMapsUrl === '#'}>
-                  <Link href={googleMapsUrl} target="_blank" rel="noopener noreferrer">
+              <Button asChild variant="outline" size="icon" disabled>
+                  <div>
                       <Navigation className="h-4 w-4" />
                       <span className="sr-only">Navigate</span>
-                  </Link>
+                  </div>
               </Button>
             )}
         </div>
@@ -110,13 +89,13 @@ export default function TripInfo({ trip, tripStage, driverLocation, onArrived, o
             <MapPin className="w-4 h-4 text-green-500" /> 
             Pickup
           </div>
-          <p className="pl-6 text-sm">{trip.pickupLocation.name}</p>
+          <p className="pl-6 text-sm">{trip.pickupLocation}</p>
 
           <div className="flex items-center gap-2 font-semibold pt-2">
             <MapPin className="w-4 h-4 text-red-500" /> 
             Destination
           </div>
-          <p className="pl-6 text-sm">{trip.destination.name}</p>
+          <p className="pl-6 text-sm">{trip.destination}</p>
         </div>
 
         {tripStage === 'AWAITING_PIN' && (

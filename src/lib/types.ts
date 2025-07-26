@@ -1,14 +1,9 @@
-export interface Location {
-  name: string;
-  lat: number;
-  lng: number;
-}
 
 export interface BookingRequest {
   id: string;
   customerName: string;
-  pickupLocation: Location;
-  destination: Location;
+  pickupLocation: string;
+  destination: string;
   fareEstimate: number;
   estimatedTime: number; // in minutes
   distance: number; // in km

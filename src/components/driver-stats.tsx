@@ -67,7 +67,7 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                                     <span className="text-sm font-semibold text-red-500">Rejected</span>
                                 )}
                                 </div>
-                                <p className="text-xs text-muted-foreground truncate">{trip.pickupLocation.name} to {trip.destination.name}</p>
+                                <p className="text-xs text-muted-foreground truncate">{trip.pickupLocation} to {trip.destination}</p>
                                 <p className="text-xs text-muted-foreground">{format(new Date(trip.timestamp), "MMM d, yyyy 'at' h:mm a")}</p>
                                 {trip.status === 'completed' && trip.tip > 0 && (
                                     <p className="text-xs text-amber-500 font-medium mt-1">Includes ₹{trip.tip.toFixed(2)} tip</p>
