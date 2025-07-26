@@ -18,17 +18,11 @@ import { useTripContext } from "@/context/trip-context";
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
 
-interface DriverDashboardProps {
-    isAvailable: boolean;
-    setIsAvailable: (isAvailable: boolean) => void;
-    setHasActiveTrip: (hasActiveTrip: boolean) => void;
-}
-
-export default function DriverDashboard({ isAvailable, setIsAvailable, setHasActiveTrip }: DriverDashboardProps) {
+export default function DriverDashboard() {
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
   const [tripStage, setTripStage] = useState<TripStage | null>(null);
   const { toast } = useToast();
-  const { tripHistory, addTripToHistory } = useTripContext();
+  const { tripHistory, addTripToHistory, isAvailable, setIsAvailable, hasActiveTrip, setHasActiveTrip } = useTripContext();
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
   
