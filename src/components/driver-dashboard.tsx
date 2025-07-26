@@ -115,7 +115,7 @@ export default function DriverDashboard() {
             </CardHeader>
         </Card>
 
-      <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-5">
+      <div className={`grid gap-4 md:gap-8 grid-cols-1 ${acceptedTrip ? 'md:grid-cols-1' : 'md:grid-cols-5'}`}>
         {bookingRequest && (
           <BookingAlert
             bookingRequest={bookingRequest}
@@ -132,52 +132,47 @@ export default function DriverDashboard() {
             />
         )}
         
-        <div className="md:col-span-3 h-[60vh] md:h-auto">
-            {acceptedTrip && tripStage ? (
-                <Card className="h-full flex items-center justify-center border-dashed">
-                    <CardContent className="p-0 text-center">
-                        <h2 className="text-2xl font-semibold">Trip Active</h2>
-                        <p className="text-muted-foreground">Trip details are shown on the right.</p>
-                    </CardContent>
-                </Card>
-            ) : (
-                <Card className="h-full flex items-center justify-center border-dashed">
-                    <CardContent className="p-0">
-                    <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
-                        {!isAvailable ? (
-                        <>
-                            <WifiOff className="w-16 h-16" />
-                            <h2 className="text-2xl font-semibold">You Are Offline</h2>
-                            <p>Toggle the switch to go online and receive requests.</p>
-                        </>
-                        ) : (
-                        <>
-                            <LoaderCircle className="w-16 h-16 animate-spin text-primary" />
-                            <h2 className="text-2xl font-semibold">Looking for a ride...</h2>
-                            <p>You'll be notified when a new request comes in.</p>
-                        </>
-                        )}
-                    </div>
-                    </CardContent>
-                </Card>
-            )}
-        </div>
-        <div className="md:col-span-2 h-auto">
-             {acceptedTrip && tripStage ? (
+        {acceptedTrip && tripStage ? (
+             <div className="md:col-span-5 h-auto">
                 <TripInfo 
                   trip={acceptedTrip} 
                   tripStage={tripStage}
                   onArrived={handleArrived}
                   onEndTrip={handleEndTrip} 
                 />
-             ): (
-              <div className="h-full rounded-lg border text-card-foreground shadow-sm flex items-center justify-center bg-muted/50">
-                <div className="p-6 pt-0 text-center text-muted-foreground">
-                  <p>Your trip information will appear here once you accept a ride.</p>
+             </div>
+            ) : (
+            <>
+                <div className="md:col-span-3 h-[60vh] md:h-auto">
+                    <Card className="h-full flex items-center justify-center border-dashed">
+                        <CardContent className="p-0">
+                        <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
+                            {!isAvailable ? (
+                            <>
+                                <WifiOff className="w-16 h-16" />
+                                <h2 className="text-2xl font-semibold">You Are Offline</h2>
+                                <p>Toggle the switch to go online and receive requests.</p>
+                            </>
+                            ) : (
+                            <>
+                                <LoaderCircle className="w-16 h-16 animate-spin text-primary" />
+                                <h2 className="text-2xl font-semibold">Looking for a ride...</h2>
+                                <p>You'll be notified when a new request comes in.</p>
+                            </>
+                            )}
+                        </div>
+                        </CardContent>
+                    </Card>
                 </div>
-              </div>
-             )}
-        </div>
+                <div className="md:col-span-2 h-auto">
+                    <div className="h-full rounded-lg border text-card-foreground shadow-sm flex items-center justify-center bg-muted/50">
+                        <div className="p-6 pt-0 text-center text-muted-foreground">
+                            <p>Your trip information will appear here once you accept a ride.</p>
+                        </div>
+                    </div>
+                </div>
+            </>
+        )}
       </div>
       <div className="grid gap-4 md:gap-8">
         <DriverStats tripHistory={tripHistory} />
