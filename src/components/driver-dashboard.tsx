@@ -178,6 +178,9 @@ export default function DriverDashboard() {
              )}
         </div>
       </div>
+      <div className="grid gap-4 md:gap-8">
+        <DriverStats tripHistory={tripHistory} />
+      </div>
     </div>
   );
 }
