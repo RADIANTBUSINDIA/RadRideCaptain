@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Car, MapPin, Wallet, Star, XCircle, CheckCircle, Calendar, IndianRupee, ArrowRight } from "lucide-react";
+import { Car, MapPin, Wallet, Star, XCircle, CheckCircle, Calendar, IndianRupee, ArrowRight, User } from "lucide-react";
 import { useTripContext } from "@/context/trip-context";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
