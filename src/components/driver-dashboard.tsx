@@ -13,6 +13,7 @@ import PinEntryDialog from "./pin-entry-dialog";
 import { useToast } from "@/hooks/use-toast";
 import DriverStats from "./driver-stats";
 import TripInfo from "./trip-info";
+import { useTripContext } from "@/context/trip-context";
 
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
@@ -21,8 +22,8 @@ export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
   const [tripStage, setTripStage] = useState<TripStage | null>(null);
-  const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const { toast } = useToast();
+  const { tripHistory, addTripToHistory } = useTripContext();
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
   
@@ -43,7 +44,7 @@ export default function DriverDashboard() {
         tip: 0,
         timestamp: new Date().toISOString(),
       };
-      setTripHistory(prev => [rejectedTrip, ...prev]);
+      addTripToHistory(rejectedTrip);
       clearBooking();
     }
   };
@@ -71,7 +72,7 @@ export default function DriverDashboard() {
         tip: Math.floor(Math.random() * (acceptedTrip.fareEstimate * 0.25)),
         timestamp: new Date().toISOString(),
       };
-      setTripHistory(prev => [completedTrip, ...prev]);
+      addTripToHistory(completedTrip);
       clearTripData();
     }
   }
