@@ -1,26 +1,23 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { WifiOff, LoaderCircle, Car, LogOut } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { WifiOff, LoaderCircle } from "lucide-react";
 import { useBookingSimulation } from "@/hooks/use-booking-simulation";
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
-import MapView from "./map-view";
-import DriverStats from "./driver-stats";
-import TripInfo from "./trip-info";
 import PinEntryDialog from "./pin-entry-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useGeolocation } from "@/hooks/use-geolocation";
-import { Button } from "./ui/button";
+import DriverStats from "./driver-stats";
+import TripInfo from "./trip-info";
+import MapView from "./map-view";
+
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
-
-const CACHED_TRIP_KEY = "radcaptian_current_trip";
 
 export default function DriverDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
@@ -29,7 +26,6 @@ export default function DriverDashboard() {
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const { toast } = useToast();
   const { currentLocation } = useGeolocation();
-  const router = useRouter();
 
   const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip, currentLocation);
   
@@ -37,17 +33,6 @@ export default function DriverDashboard() {
     if (bookingRequest) {
       setAcceptedTrip(bookingRequest);
       setTripStage('DRIVING_TO_PICKUP');
-
-      try {
-        const tripToCache = {
-            pickupLocation: bookingRequest.pickupLocation,
-            destination: bookingRequest.destination,
-        };
-        localStorage.setItem(CACHED_TRIP_KEY, JSON.stringify(tripToCache));
-      } catch (error) {
-        console.error("Failed to cache trip data:", error);
-      }
-
       clearBooking();
     }
   };
@@ -69,11 +54,6 @@ export default function DriverDashboard() {
   const clearTripData = () => {
     setAcceptedTrip(null);
     setTripStage(null);
-    try {
-        localStorage.removeItem(CACHED_TRIP_KEY);
-    } catch (error) {
-        console.error("Failed to remove cached trip data:", error);
-    }
   };
 
 
@@ -119,37 +99,26 @@ export default function DriverDashboard() {
     });
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    router.push('/');
-  }
-
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      <header className="flex items-center justify-between p-4 border-b bg-card shadow-sm">
-        <div className="flex items-center gap-2">
-          <Car className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-bold tracking-tight">RadCaptian</h1>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="availability-toggle" className={isAvailable ? "text-primary font-semibold" : "text-muted-foreground"}>
-              {isAvailable ? "Online" : "Offline"}
-            </Label>
-            <Switch
-              id="availability-toggle"
-              checked={isAvailable}
-              onCheckedChange={handleAvailabilityChange}
-              disabled={!!acceptedTrip}
-            />
-          </div>
-          <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Logout">
-              <LogOut className="h-5 w-5" />
-          </Button>
-        </div>
-      </header>
+    <div className="flex flex-col gap-4 md:gap-8">
+       <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Your Status</CardTitle>
+                 <div className="flex items-center space-x-2">
+                    <Label htmlFor="availability-toggle" className={isAvailable ? "text-primary font-semibold" : "text-muted-foreground"}>
+                    {isAvailable ? "Online" : "Offline"}
+                    </Label>
+                    <Switch
+                    id="availability-toggle"
+                    checked={isAvailable}
+                    onCheckedChange={handleAvailabilityChange}
+                    disabled={!!acceptedTrip}
+                    />
+                </div>
+            </CardHeader>
+        </Card>
 
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-5 gap-6 p-4 md:p-6 lg:p-8 overflow-hidden">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-5">
         {bookingRequest && (
           <BookingAlert
             bookingRequest={bookingRequest}
@@ -162,11 +131,11 @@ export default function DriverDashboard() {
             <PinEntryDialog 
                 isOpen={tripStage === 'AWAITING_PIN'}
                 onPinVerified={handlePinVerified}
-                onClose={() => setTripStage('DRIVING_TO_PICKUP')} // Go back to pickup screen
+                onClose={() => setTripStage('DRIVING_TO_PICKUP')}
             />
         )}
         
-        <div className="lg:col-span-3 flex flex-col gap-6 h-full">
+        <div className="lg:col-span-3 h-[60vh]">
             {acceptedTrip && tripStage ? (
                 <MapView 
                   trip={acceptedTrip} 
@@ -195,7 +164,7 @@ export default function DriverDashboard() {
                 </Card>
             )}
         </div>
-        <div className="lg:col-span-2 h-full overflow-y-auto">
+        <div className="lg:col-span-2 h-[60vh]">
              {acceptedTrip && tripStage ? (
                 <TripInfo 
                   trip={acceptedTrip} 
@@ -208,7 +177,7 @@ export default function DriverDashboard() {
                 <DriverStats tripHistory={tripHistory} />
              )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
