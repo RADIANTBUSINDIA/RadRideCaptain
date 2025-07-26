@@ -16,28 +16,43 @@ import {
   Settings,
   Gift,
   LogOut,
+  ChevronDown,
+  CarTaxiFront,
+  Banknote,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import RadLogo from "./rad-logo";
+import React from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
 
-const menuItems = [
+const mainMenuItems = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "My Rides", href: "/dashboard/my-rides", icon: Car },
   { name: "Earnings", href: "/dashboard/earnings", icon: BadgeDollarSign },
   { name: "Ratings", href: "/dashboard/ratings", icon: Star },
   { name: "Promotions", href: "/dashboard/promotions", icon: Gift },
-  { name: "Documents", href: "/dashboard/profile/documents", icon: FileText },
-  { name: "Profile", href: "/dashboard/profile/personal", icon: User },
+];
+
+const profileMenuItems = [
+    { name: "Personal", href: "/dashboard/profile/personal", icon: User },
+    { name: "Vehicle", href: "/dashboard/profile/vehicle", icon: CarTaxiFront },
+    { name: "Documents", href: "/dashboard/profile/documents", icon: FileText },
+    { name: "Bank Details", href: "/dashboard/profile/bank", icon: Banknote },
+    { name: "Security", href: "/dashboard/profile/security", icon: Lock },
+];
+
+const supportMenuItems = [
   { name: "Settings", href: "/dashboard/profile/settings", icon: Settings },
-  { name: "Support", href: "/dashboard/support/help-center", icon: LifeBuoy },
+  { name: "Help Center", href: "/dashboard/support/help-center", icon: LifeBuoy },
 ];
 
 export default function SideNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const [isProfileOpen, setIsProfileOpen] = React.useState(pathname.includes("/profile"));
 
   const handleLogout = () => {
-    // Clear local storage and redirect to home
     localStorage.clear();
     router.push("/");
   };
@@ -60,20 +75,58 @@ export default function SideNav() {
 
        <div className="flex-1 overflow-y-auto">
             <nav className="grid items-start p-4 text-base font-medium">
-            {menuItems.map((item) => (
-                <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-3 text-muted-foreground transition-all hover:text-primary hover:bg-muted",
-                    pathname === item.href && "text-primary bg-muted"
-                    )}
-                >
-                    <item.icon className="h-5 w-5" />
-                    {item.name}
-                </Link>
-                )
-            )}
+                {mainMenuItems.map((item) => (
+                    <Link
+                        key={item.name}
+                        href={item.href}
+                        className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-3 text-muted-foreground transition-all hover:text-primary hover:bg-muted",
+                        pathname === item.href && "text-primary bg-muted"
+                        )}
+                    >
+                        <item.icon className="h-5 w-5" />
+                        {item.name}
+                    </Link>
+                ))}
+
+                 <Collapsible open={isProfileOpen} onOpenChange={setIsProfileOpen}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full gap-3 rounded-lg px-3 py-3 text-muted-foreground transition-all hover:text-primary hover:bg-muted">
+                        <div className="flex items-center gap-3">
+                            <User className="h-5 w-5" />
+                            <span>Profile</span>
+                        </div>
+                        <ChevronDown className={cn("h-5 w-5 transition-transform", isProfileOpen && "rotate-180")} />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pl-8 space-y-1 py-2">
+                        {profileMenuItems.map((item) => (
+                             <Link
+                                key={item.name}
+                                href={item.href}
+                                className={cn(
+                                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:text-primary hover:bg-muted",
+                                pathname.startsWith(item.href) && "text-primary bg-muted font-semibold"
+                                )}
+                            >
+                                <item.icon className="h-4 w-4" />
+                                {item.name}
+                            </Link>
+                        ))}
+                    </CollapsibleContent>
+                </Collapsible>
+
+                {supportMenuItems.map((item) => (
+                    <Link
+                        key={item.name}
+                        href={item.href}
+                        className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-3 text-muted-foreground transition-all hover:text-primary hover:bg-muted",
+                        pathname === item.href && "text-primary bg-muted"
+                        )}
+                    >
+                        <item.icon className="h-5 w-5" />
+                        {item.name}
+                    </Link>
+                ))}
             </nav>
         </div>
 

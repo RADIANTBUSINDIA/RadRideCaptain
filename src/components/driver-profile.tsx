@@ -3,13 +3,14 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, Mail, Phone, Car } from "lucide-react";
+import { User, Mail, Phone, Car, Home } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface DriverProfileData {
     name: string;
     email: string;
     phone: string;
+    address: string;
     vehicleType: string;
     vehicleModel: string;
     vehicleColor: string;
@@ -17,8 +18,8 @@ interface DriverProfileData {
 }
 
 const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | null }) => (
-    <div className="flex items-center gap-4 py-3 border-b last:border-b-0">
-        <Icon className="w-5 h-5 text-primary" />
+    <div className="flex items-start gap-4 py-3 border-b last:border-b-0">
+        <Icon className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
         <div className="flex-1">
             <p className="text-xs text-muted-foreground">{label}</p>
             <p className="text-sm font-medium">{value || 'N/A'}</p>
@@ -75,6 +76,7 @@ export default function DriverProfile() {
                     <InfoItem icon={User} label="Full Name" value={profile.name} />
                     <InfoItem icon={Mail} label="Email" value={profile.email} />
                     <InfoItem icon={Phone} label="Phone Number" value={profile.phone} />
+                    <InfoItem icon={Home} label="Address" value={profile.address} />
                 </CardContent>
             </Card>
 
