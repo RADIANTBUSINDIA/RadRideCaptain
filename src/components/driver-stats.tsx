@@ -4,12 +4,13 @@
 import type { Trip } from "@/lib/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BadgeDollarSign, BarChart as BarChartIcon, History, User } from "lucide-react";
+import { BadgeDollarSign, BarChart as BarChartIcon, History, User, CheckCircle, XCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import DriverProfile from "./driver-profile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 interface DriverStatsProps {
   tripHistory: Trip[];
@@ -58,20 +59,26 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                     <ScrollArea className="h-full pr-4">
                         <div className="space-y-4">
                             {tripHistory.length > 0 ? tripHistory.map((trip) => (
-                            <div key={trip.id} className="p-3 border rounded-lg">
-                                <div className="flex justify-between items-center">
-                                <span className="font-semibold">{trip.customerName}</span>
-                                {trip.status === 'completed' ? (
-                                    <span className="text-sm font-bold text-green-500">₹{(trip.finalFare + trip.tip).toFixed(2)}</span>
-                                ) : (
-                                    <span className="text-sm font-semibold text-red-500">Rejected</span>
-                                )}
+                            <div key={trip.id} className="p-3 border rounded-lg flex items-center gap-4">
+                                <div className={cn("p-2 rounded-full", trip.status === 'completed' ? 'bg-green-100' : 'bg-red-100')}>
+                                     {trip.status === 'completed' ? (
+                                        <CheckCircle className="w-5 h-5 text-green-600" />
+                                     ) : (
+                                        <XCircle className="w-5 h-5 text-red-600" />
+                                     )}
                                 </div>
-                                <p className="text-xs text-muted-foreground truncate">{trip.pickupLocation} to {trip.destination}</p>
-                                <p className="text-xs text-muted-foreground">{format(new Date(trip.timestamp), "MMM d, yyyy 'at' h:mm a")}</p>
-                                {trip.status === 'completed' && trip.tip > 0 && (
-                                    <p className="text-xs text-amber-500 font-medium mt-1">Includes ₹{trip.tip.toFixed(2)} tip</p>
-                                )}
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-center">
+                                        <span className="font-semibold">{trip.customerName}</span>
+                                        {trip.status === 'completed' ? (
+                                            <span className="text-sm font-bold text-green-600">₹{(trip.finalFare + trip.tip).toFixed(2)}</span>
+                                        ) : (
+                                            <span className="text-sm font-semibold text-red-600">Rejected</span>
+                                        )}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground truncate">{trip.pickupLocation.split(',')[0]} to {trip.destination.split(',')[0]}</p>
+                                    <p className="text-xs text-muted-foreground">{format(new Date(trip.timestamp), "MMM d, h:mm a")}</p>
+                                </div>
                             </div>
                             )) : (
                                 <div className="text-center text-muted-foreground py-10">
