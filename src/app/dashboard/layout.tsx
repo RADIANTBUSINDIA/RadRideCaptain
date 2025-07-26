@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import SideNav from '@/components/side-nav';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Car, LoaderCircle } from 'lucide-react';
 import RadLogo from '@/components/rad-logo';
 import { TripProvider, useTripContext } from '@/context/trip-context';
@@ -31,6 +31,10 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
     <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
       <div className="flex min-h-screen w-full bg-muted/40">
         <SheetContent side="left" className="p-0 flex flex-col w-64">
+           <SheetHeader className="sr-only">
+            <SheetTitle>Main Menu</SheetTitle>
+            <SheetDescription>Navigation menu for the driver dashboard.</SheetDescription>
+          </SheetHeader>
           <div className="flex-1" onClick={() => setIsSidebarOpen(false)}>
             <SideNav />
           </div>
