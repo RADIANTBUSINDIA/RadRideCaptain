@@ -13,10 +13,26 @@ const indianCustomerNames = [
 ];
 
 const bangaloreLocations = [
-    "Lalbagh Botanical Garden", "Cubbon Park", "MG Road", "Koramangala", "Indiranagar",
-    "Vidhana Soudha", "Bangalore Palace", "Commercial Street", "UB City", "Bannerghatta National Park",
-    "HSR Layout", "Marathahalli", "Whitefield", "Electronic City", "Jayanagar", "JP Nagar",
-    "Basavanagudi", "Malleswaram", "Majestic", "Shivajinagar"
+    "123, Lalbagh Road, Mavalli, Bengaluru, Karnataka 560004",
+    "Kasturba Road, Sampangi Rama Nagara, Bengaluru, Karnataka 560001",
+    "Mahatma Gandhi Road, Shivaji Nagar, Bengaluru, Karnataka 560001",
+    "1st Main Road, 5th Block, Koramangala, Bengaluru, Karnataka 560095",
+    "80 Feet Road, Indiranagar, Bengaluru, Karnataka 560038",
+    "Dr. Ambedkar Veedhi, Sampangi Rama Nagara, Bengaluru, Karnataka 560001",
+    "Palace Road, Vasanth Nagar, Bengaluru, Karnataka 560052",
+    "Commercial Street, Tasker Town, Shivaji Nagar, Bengaluru, Karnataka 560001",
+    "24, Vittal Mallya Road, KG Halli, D' Souza Layout, Ashok Nagar, Bengaluru, Karnataka 560001",
+    "Bannerghatta Main Road, Bannerghatta, Bengaluru, Karnataka 560083",
+    "19th Main Road, Sector 3, HSR Layout, Bengaluru, Karnataka 560102",
+    "Marathahalli Bridge, Marathahalli, Bengaluru, Karnataka 560037",
+    "ITPL Main Road, Whitefield, Bengaluru, Karnataka 560066",
+    "Hosur Road, Electronic City, Bengaluru, Karnataka 560100",
+    "4th Block, Jayanagar, Bengaluru, Karnataka 560011",
+    "6th Phase, JP Nagar, Bengaluru, Karnataka 560078",
+    "Bull Temple Road, Basavanagudi, Bengaluru, Karnataka 560004",
+    "8th Cross Road, Malleswaram, Bengaluru, Karnataka 560003",
+    "Kempegowda Bus Station, Majestic, Bengaluru, Karnataka 560009",
+    "Russel Market, Shivajinagar, Bengaluru, Karnataka 560051"
 ];
 
 
