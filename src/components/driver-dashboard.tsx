@@ -116,7 +116,7 @@ export default function DriverDashboard() {
             </CardHeader>
         </Card>
 
-      <div className={`grid gap-4 md:gap-8 grid-cols-1 ${acceptedTrip ? 'md:grid-cols-1' : 'md:grid-cols-5'}`}>
+      <div className="grid gap-4 md:gap-8 grid-cols-1">
         {bookingRequest && (
           <BookingAlert
             bookingRequest={bookingRequest}
@@ -134,7 +134,7 @@ export default function DriverDashboard() {
         )}
         
         {acceptedTrip && tripStage ? (
-             <div className="md:col-span-5 h-auto">
+             <div className="h-auto">
                 <TripInfo 
                   trip={acceptedTrip} 
                   tripStage={tripStage}
@@ -143,8 +143,7 @@ export default function DriverDashboard() {
                 />
              </div>
             ) : (
-            <>
-                <div className="md:col-span-3 h-[60vh] md:h-auto">
+                <div className="h-[60vh] md:h-auto">
                     <Card className="h-full flex items-center justify-center border-dashed">
                         <CardContent className="p-0">
                         <div className="flex flex-col items-center gap-4 text-center text-muted-foreground">
@@ -165,16 +164,6 @@ export default function DriverDashboard() {
                         </CardContent>
                     </Card>
                 </div>
-                {isAvailable && (
-                  <div className="md:col-span-2 h-auto">
-                      <div className="h-full rounded-lg border text-card-foreground shadow-sm flex items-center justify-center bg-muted/50">
-                          <div className="p-6 pt-0 text-center text-muted-foreground">
-                              <p>Your trip information will appear here once you accept a ride.</p>
-                          </div>
-                      </div>
-                  </div>
-                )}
-            </>
         )}
       </div>
       <div className="grid gap-4 md:gap-8">
