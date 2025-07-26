@@ -1,12 +1,13 @@
 
 "use client";
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Star, ThumbsUp, MessageSquare, Sparkles, ShieldCheck, TrendingUp, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 const ratingsData = {
     overallRating: 4.8,
