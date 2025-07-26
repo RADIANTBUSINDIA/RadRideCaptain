@@ -6,17 +6,13 @@ import { usePathname } from 'next/navigation';
 import SideNav from '@/components/side-nav';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Car, LoaderCircle } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import RadLogo from '@/components/rad-logo';
-import { TripProvider, useTripContext } from '@/context/trip-context';
-import { cn } from '@/lib/utils';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { TripProvider } from '@/context/trip-context';
 
 function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const pathname = usePathname();
-  const { isAvailable, setIsAvailable, hasActiveTrip } = useTripContext();
 
   const getPageTitle = (path: string) => {
     const parts = path.split('/').filter(Boolean);
@@ -55,18 +51,6 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-semibold tracking-tight">{pageTitle}</h1>
               </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              {isAvailable && !hasActiveTrip && <LoaderCircle className="w-5 h-5 animate-spin" />}
-              <Label htmlFor="availability-toggle" className="font-semibold">
-                {isAvailable ? "Online" : "Offline"}
-              </Label>
-              <Switch
-                id="availability-toggle"
-                checked={isAvailable}
-                onCheckedChange={setIsAvailable}
-                disabled={hasActiveTrip}
-              />
             </div>
           </header>
           <main className="flex-1 overflow-auto p-4 sm:px-6 sm:py-6">

@@ -4,8 +4,8 @@
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WifiOff, Search } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { WifiOff, Search, LoaderCircle } from "lucide-react";
 import { useBookingSimulation } from "@/hooks/use-booking-simulation";
 import type { BookingRequest, Trip } from "@/lib/types";
 import BookingAlert from "./booking-alert";
@@ -119,6 +119,28 @@ export default function DriverDashboard() {
                 onClose={() => setTripStage('DRIVING_TO_PICKUP')}
             />
         )}
+
+        <Card>
+            <CardContent className="p-4 flex justify-between items-center">
+                <div className="space-y-1">
+                    <h2 className="text-xl font-semibold">Ready to Drive?</h2>
+                    <p className="text-sm text-muted-foreground">Toggle to start receiving ride requests.</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                    {isAvailable && !hasActiveTrip && <LoaderCircle className="w-5 h-5 animate-spin" />}
+                    <Label htmlFor="availability-toggle" className="font-semibold text-lg">
+                        {isAvailable ? "Online" : "Offline"}
+                    </Label>
+                    <Switch
+                        id="availability-toggle"
+                        checked={isAvailable}
+                        onCheckedChange={handleAvailabilityChange}
+                        disabled={hasActiveTrip}
+                        className="data-[state=checked]:bg-green-500"
+                    />
+                </div>
+            </CardContent>
+        </Card>
         
         {acceptedTrip && tripStage ? (
              <div className="h-auto">
@@ -138,7 +160,7 @@ export default function DriverDashboard() {
                             <>
                                 <WifiOff className="w-16 h-16" />
                                 <h2 className="text-2xl font-semibold">You Are Offline</h2>
-                                <p>Toggle the switch in the header to go online.</p>
+                                <p>Toggle the switch above to go online.</p>
                             </>
                             ) : (
                             <>
