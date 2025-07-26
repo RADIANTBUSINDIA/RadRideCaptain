@@ -30,8 +30,8 @@ export default function DashboardLayout({
 
   return (
     <TripProvider>
-      <div className="flex min-h-screen w-full bg-muted/40">
-        <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+        <div className="flex min-h-screen w-full bg-muted/40">
             <SheetContent side="left" className="p-0 flex flex-col w-64">
                 <div className="flex-1" onClick={() => setIsSidebarOpen(false)}>
                     <SideNav />
@@ -40,25 +40,25 @@ export default function DashboardLayout({
                     <RadLogo />
                 </div>
             </SheetContent>
-        </Sheet>
-        
-        <div className="flex flex-col w-full">
-          <header className="sticky top-0 z-30 flex h-16 items-center gap-4 bg-primary text-primary-foreground px-4 sm:px-6">
-              <SheetTrigger asChild>
-                  <Button size="icon" variant="ghost" className="md:flex hover:bg-primary/90 hover:text-primary-foreground -ml-2">
-                      <Menu className="h-6 w-6" />
-                      <span className="sr-only">Toggle Menu</span>
-                  </Button>
-              </SheetTrigger>
-              <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-semibold tracking-tight">{pageTitle}</h1>
-              </div>
-          </header>
-          <main className="flex-1 overflow-auto p-4 sm:px-6 sm:py-6">
-              {children}
-          </main>
+          
+          <div className="flex flex-col w-full">
+            <header className="sticky top-0 z-30 flex h-16 items-center gap-4 bg-primary text-primary-foreground px-4 sm:px-6">
+                <SheetTrigger asChild>
+                    <Button size="icon" variant="ghost" className="md:flex hover:bg-primary/90 hover:text-primary-foreground -ml-2">
+                        <Menu className="h-6 w-6" />
+                        <span className="sr-only">Toggle Menu</span>
+                    </Button>
+                </SheetTrigger>
+                <div className="flex items-center gap-2">
+                    <h1 className="text-xl font-semibold tracking-tight">{pageTitle}</h1>
+                </div>
+            </header>
+            <main className="flex-1 overflow-auto p-4 sm:px-6 sm:py-6">
+                {children}
+            </main>
+          </div>
         </div>
-      </div>
+      </Sheet>
     </TripProvider>
   );
 }
