@@ -3,8 +3,11 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import type { Trip } from '@/lib/types';
+import { database } from '@/lib/firebase';
+import { ref, onValue, push, set } from 'firebase/database';
 
-const TRIP_HISTORY_STORAGE_KEY = 'tripHistory';
+
+const DRIVER_ID = "driver_001"; // In a real app, this would be dynamic based on auth
 
 interface TripContextType {
   tripHistory: Trip[];
@@ -22,30 +25,31 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [hasActiveTrip, setHasActiveTrip] = useState(false);
 
-  // Load trip history from local storage on initial render
+  // Load trip history from Firebase Realtime Database
   useEffect(() => {
-    try {
-      const storedHistory = localStorage.getItem(TRIP_HISTORY_STORAGE_KEY);
-      if (storedHistory) {
-        setTripHistory(JSON.parse(storedHistory));
-      }
-    } catch (error) {
-      console.error("Failed to load trip history from local storage", error);
-    }
-  }, []);
+    const tripsRef = ref(database, `trips/${DRIVER_ID}`);
+    const unsubscribe = onValue(tripsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            const history: Trip[] = Object.values(data);
+            // Firebase returns objects, converting to array and sorting by timestamp
+            const sortedHistory = history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+            setTripHistory(sortedHistory);
+        } else {
+            setTripHistory([]);
+        }
+    });
 
-  // Save trip history to local storage whenever it changes
-  useEffect(() => {
-    try {
-      localStorage.setItem(TRIP_HISTORY_STORAGE_KEY, JSON.stringify(tripHistory));
-    } catch (error) {
-      console.error("Failed to save trip history to local storage", error);
-    }
-  }, [tripHistory]);
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
 
   const addTripToHistory = (trip: Trip) => {
-    setTripHistory((prevHistory) => [trip, ...prevHistory]);
+    // A new trip is pushed to the database, and the onValue listener will update the state
+    const tripsRef = ref(database, `trips/${DRIVER_ID}`);
+    const newTripRef = push(tripsRef);
+    set(newTripRef, trip);
   };
 
   return (
