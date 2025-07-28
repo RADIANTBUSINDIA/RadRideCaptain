@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, Mail, Phone, Car, Home } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { database } from "@/lib/firebase";
+import { ref, onValue } from "firebase/database";
 
 interface DriverProfileData {
     name: string;
@@ -32,24 +34,64 @@ export default function DriverProfile() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let driverId: string | null = null;
         try {
             const storedProfile = localStorage.getItem("driverProfile");
             if (storedProfile) {
-                setProfile(JSON.parse(storedProfile));
+                driverId = JSON.parse(storedProfile).id;
             }
         } catch (error) {
-            console.error("Failed to parse driver profile from localStorage", error);
-        } finally {
+            console.error("Failed to parse driver ID from localStorage", error);
             setLoading(false);
+            return;
         }
+
+        if (!driverId) {
+            setLoading(false);
+            return;
+        }
+
+        const driverRef = ref(database, 'drivers/' + driverId);
+        
+        const unsubscribe = onValue(driverRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                setProfile(data);
+            } else {
+                setProfile(null);
+            }
+            setLoading(false);
+        }, (error) => {
+            console.error("Firebase read failed: ", error);
+            setLoading(false);
+        });
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
     }, []);
 
     if (loading) {
         return (
             <div className="space-y-4 p-1">
-                <Skeleton className="h-8 w-1/2" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
+                 <Card>
+                    <CardHeader className="p-4">
+                        <Skeleton className="h-5 w-1/3" />
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0 space-y-4">
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader className="p-4">
+                         <Skeleton className="h-5 w-1/3" />
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0 space-y-4">
+                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-10 w-full" />
+                    </CardContent>
+                </Card>
             </div>
         );
     }
@@ -57,8 +99,8 @@ export default function DriverProfile() {
     if (!profile) {
         return (
             <div className="text-center text-muted-foreground py-10">
-                <p>No profile data found.</p>
-                <p className="text-sm">Please complete the onboarding process.</p>
+                <p>Could not load profile data.</p>
+                <p className="text-sm">Please try again later or contact support.</p>
             </div>
         );
     }
