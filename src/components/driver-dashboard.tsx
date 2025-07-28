@@ -18,13 +18,24 @@ import { useTripContext } from "@/context/trip-context";
 
 export type TripStage = 'DRIVING_TO_PICKUP' | 'AWAITING_PIN' | 'TRIP_IN_PROGRESS';
 
+function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
+}
+
 export default function DriverDashboard() {
-  const [acceptedTrip, setAcceptedTrip] = useState<BookingRequest | null>(null);
+  const [acceptedTrip, setAcceptedTrip] = useState<Omit<BookingRequest, 'countdown'> | null>(null);
   const [tripStage, setTripStage] = useState<TripStage | null>(null);
   const { toast } = useToast();
   const { tripHistory, addTripToHistory, isAvailable, setIsAvailable, hasActiveTrip, setHasActiveTrip } = useTripContext();
 
-  const { bookingRequest, clearBooking } = useBookingSimulation(isAvailable, !!acceptedTrip);
+  const { bookingRequest, clearBooking, driverLocation } = useBookingSimulation(isAvailable, !!acceptedTrip);
   
   useEffect(() => {
     setHasActiveTrip(!!acceptedTrip);
@@ -33,7 +44,8 @@ export default function DriverDashboard() {
 
   const handleAccept = () => {
     if (bookingRequest) {
-      setAcceptedTrip(bookingRequest);
+      const { countdown, ...tripData } = bookingRequest;
+      setAcceptedTrip(tripData);
       setTripStage('DRIVING_TO_PICKUP');
       clearBooking();
     }
@@ -41,8 +53,9 @@ export default function DriverDashboard() {
 
   const handleDecline = () => {
     if (bookingRequest) {
+      const { countdown, ...tripData } = bookingRequest;
       const rejectedTrip: Trip = {
-        ...bookingRequest,
+        ...tripData,
         status: 'rejected',
         finalFare: 0,
         tip: 0,
@@ -101,12 +114,15 @@ export default function DriverDashboard() {
     });
   };
 
+  const timeToPickup = bookingRequest ? Math.round((haversineDistance(driverLocation.lat, driverLocation.lng, bookingRequest.pickupLocation.lat, bookingRequest.pickupLocation.lng) / 25) * 60) : 0;
+
   return (
     <div className="flex flex-col gap-4 md:gap-8">
       
         {bookingRequest && (
           <BookingAlert
             bookingRequest={bookingRequest}
+            timeToPickup={timeToPickup}
             onAccept={handleAccept}
             onDecline={handleDecline}
           />

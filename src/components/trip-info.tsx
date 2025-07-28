@@ -8,7 +8,7 @@ import { User, MapPin, Navigation, Pin } from "lucide-react";
 import type { TripStage } from "./driver-dashboard";
 
 interface TripInfoProps {
-  trip: BookingRequest;
+  trip: Omit<BookingRequest, 'countdown'>;
   tripStage: TripStage;
   onArrived: () => void;
   onEndTrip: () => void;
@@ -89,13 +89,13 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
             <MapPin className="w-4 h-4 text-green-500" /> 
             Pickup
           </div>
-          <p className="pl-6 text-sm">{trip.pickupLocation}</p>
+          <p className="pl-6 text-sm">{trip.pickupLocation.address}</p>
 
           <div className="flex items-center gap-2 font-semibold pt-2">
             <MapPin className="w-4 h-4 text-red-500" /> 
             Destination
           </div>
-          <p className="pl-6 text-sm">{trip.destination}</p>
+          <p className="pl-6 text-sm">{trip.destination.address}</p>
         </div>
 
         {tripStage === 'AWAITING_PIN' && (
