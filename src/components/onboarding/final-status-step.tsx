@@ -18,18 +18,23 @@ export default function FinalStatusStep({ formData }: FinalStatusStepProps) {
   useEffect(() => {
     const processSubmission = async () => {
         try {
+            // Generate a unique driver ID
+            const driverId = `driver_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+
             // Simulate a 4-second review period
             await new Promise(resolve => setTimeout(resolve, 4000));
 
             // Call the server action to submit data
-            const result = await submitOnboarding(formData);
+            const result = await submitOnboarding(formData, driverId);
 
-            if (result.success) {
+            if (result.success && result.driverId) {
                 // On successful submission, cache profile data to localStorage
                 const driverProfile = {
+                    id: result.driverId,
                     name: formData.name,
                     email: formData.email,
                     phone: formData.phone,
+                    address: formData.address,
                     vehicleType: formData.vehicleType,
                     vehicleModel: formData.vehicleModel,
                     vehicleColor: formData.vehicleColor,
@@ -97,7 +102,7 @@ export default function FinalStatusStep({ formData }: FinalStatusStepProps) {
          <>
             <h2 className="text-2xl font-bold mb-2">Profile Approved!</h2>
             <p className="text-muted-foreground mb-4">
-                Welcome to RadCaptian! You are all set to start driving.
+                Welcome to Rad RideCaptain! You are all set to start driving.
             </p>
             <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 my-6 flex items-center justify-center space-x-3">
                 <CheckCircle className="w-5 h-5" />

@@ -7,8 +7,6 @@ import { database } from '@/lib/firebase';
 import { ref, onValue, push, set } from 'firebase/database';
 
 
-const DRIVER_ID = "driver_001"; // In a real app, this would be dynamic based on auth
-
 interface TripContextType {
   tripHistory: Trip[];
   addTripToHistory: (trip: Trip) => void;
@@ -16,6 +14,7 @@ interface TripContextType {
   setIsAvailable: (isAvailable: boolean) => void;
   hasActiveTrip: boolean;
   setHasActiveTrip: (hasActiveTrip: boolean) => void;
+  driverId: string | null;
 }
 
 const TripContext = createContext<TripContextType | undefined>(undefined);
@@ -24,10 +23,27 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
   const [isAvailable, setIsAvailable] = useState(false);
   const [hasActiveTrip, setHasActiveTrip] = useState(false);
+  const [driverId, setDriverId] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+        const storedProfile = localStorage.getItem("driverProfile");
+        if (storedProfile) {
+            const profile = JSON.parse(storedProfile);
+            if(profile.id) {
+                setDriverId(profile.id);
+            }
+        }
+    } catch (e) {
+        console.error("Could not parse driver profile from local storage", e);
+    }
+  }, []);
 
   // Load trip history from Firebase Realtime Database
   useEffect(() => {
-    const tripsRef = ref(database, `trips/${DRIVER_ID}`);
+    if (!driverId) return;
+
+    const tripsRef = ref(database, `trips/${driverId}`);
     const unsubscribe = onValue(tripsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -42,12 +58,13 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, []);
+  }, [driverId]);
 
 
   const addTripToHistory = (trip: Trip) => {
+    if (!driverId) return;
     // A new trip is pushed to the database, and the onValue listener will update the state
-    const tripsRef = ref(database, `trips/${DRIVER_ID}`);
+    const tripsRef = ref(database, `trips/${driverId}`);
     const newTripRef = push(tripsRef);
     set(newTripRef, trip);
   };
@@ -59,7 +76,8 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         isAvailable, 
         setIsAvailable,
         hasActiveTrip,
-        setHasActiveTrip
+        setHasActiveTrip,
+        driverId
     }}>
       {children}
     </TripContext.Provider>

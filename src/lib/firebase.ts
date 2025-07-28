@@ -10,7 +10,7 @@ const firebaseConfig = {
     authDomain: "radcaptian.firebaseapp.com",
     measurementId: "",
     messagingSenderId: "412648933770",
-    databaseURL: "https://radcaptian-default-rtdb.firebaseio.com",
+    databaseURL: "https://radcaptian-default-rtdb.asia-southeast1.firebasedatabase.app",
 };
 
 // Initialize Firebase
