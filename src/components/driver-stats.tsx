@@ -76,7 +76,11 @@ export default function DriverStats({ tripHistory }: DriverStatsProps) {
                                             <span className="text-sm font-semibold text-red-600">Rejected</span>
                                         )}
                                     </div>
-                                    <p className="text-xs text-muted-foreground truncate">{trip.pickupLocation.address.split(',')[0]} to {trip.destination.address.split(',')[0]}</p>
+                                    {trip.pickupLocation?.address && trip.destination?.address ? (
+                                        <p className="text-xs text-muted-foreground truncate">{trip.pickupLocation.address.split(',')[0]} to {trip.destination.address.split(',')[0]}</p>
+                                    ) : (
+                                        <p className="text-xs text-muted-foreground italic">Ride details not available</p>
+                                    )}
                                     <p className="text-xs text-muted-foreground">{format(new Date(trip.timestamp), "MMM d, h:mm a")}</p>
                                 </div>
                             </div>
