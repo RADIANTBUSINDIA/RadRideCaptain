@@ -7,19 +7,10 @@ import { User, Mail, Phone, Car, Home } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { database } from "@/lib/firebase";
 import { ref, onValue } from "firebase/database";
+import type { Driver } from "@/lib/types";
 
-interface DriverProfileData {
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    vehicleType: string;
-    vehicleModel: string;
-    vehicleColor: string;
-    vehicleNumber: string;
-}
 
-const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | null }) => (
+const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | null | undefined }) => (
     <div className="flex items-start gap-4 py-3 border-b last:border-b-0">
         <Icon className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
         <div className="flex-1">
@@ -30,7 +21,7 @@ const InfoItem = ({ icon: Icon, label, value }: { icon: React.ElementType, label
 );
 
 export default function DriverProfile() {
-    const [profile, setProfile] = useState<DriverProfileData | null>(null);
+    const [profile, setProfile] = useState<Driver | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -115,10 +106,10 @@ export default function DriverProfile() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                    <InfoItem icon={User} label="Full Name" value={profile.name} />
-                    <InfoItem icon={Mail} label="Email" value={profile.email} />
-                    <InfoItem icon={Phone} label="Phone Number" value={profile.phone} />
-                    <InfoItem icon={Home} label="Address" value={profile.address} />
+                    <InfoItem icon={User} label="Full Name" value={profile.profile.name} />
+                    <InfoItem icon={Mail} label="Email" value={profile.profile.email} />
+                    <InfoItem icon={Phone} label="Phone Number" value={profile.profile.phone} />
+                    <InfoItem icon={Home} label="Address" value={profile.profile.address?.street} />
                 </CardContent>
             </Card>
 
@@ -130,10 +121,10 @@ export default function DriverProfile() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                    <InfoItem icon={Car} label="Vehicle Type" value={profile.vehicleType} />
-                    <InfoItem icon={Car} label="Model" value={profile.vehicleModel} />
-                    <InfoItem icon={Car} label="Color" value={profile.vehicleColor} />
-                    <InfoItem icon={Car} label="Registration No." value={profile.vehicleNumber} />
+                    <InfoItem icon={Car} label="Vehicle Type" value={profile.licensing?.vehicle?.type} />
+                    <InfoItem icon={Car} label="Model" value={profile.licensing?.vehicle?.model} />
+                    <InfoItem icon={Car} label="Color" value={"Not specified"} />
+                    <InfoItem icon={Car} label="Registration No." value={profile.licensing?.vehicle?.plateNumber} />
                 </CardContent>
             </Card>
         </div>
