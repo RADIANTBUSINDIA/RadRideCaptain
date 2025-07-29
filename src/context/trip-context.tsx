@@ -43,10 +43,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!driverId) return;
 
-    // The current implementation saves trips directly under trips/{driverId}
-    // but the new schema expects it under drivers/{driverId}/rideHistory
-    // We will use the old path for now for backward compatibility and to not break the app
-    const tripsRef = ref(database, `trips/${driverId}`);
+    const tripsRef = ref(database, `drivers/${driverId}/rideHistory`);
     const unsubscribe = onValue(tripsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -58,6 +55,9 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         } else {
             setTripHistory([]);
         }
+    }, (error) => {
+        console.error("Firebase read failed:", error);
+        setTripHistory([]);
     });
 
     // Cleanup subscription on unmount
@@ -68,8 +68,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const addTripToHistory = (trip: Trip) => {
     if (!driverId) return;
     // A new trip is pushed to the database, and the onValue listener will update the state
-    const tripsRef = ref(database, `trips/${driverId}`);
-    const newTripRef = push(tripsRef);
+    const newTripRef = push(ref(database, `drivers/${driverId}/rideHistory`));
     set(newTripRef, trip);
   };
 

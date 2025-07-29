@@ -82,20 +82,24 @@ export default function MyRidesPage() {
                                     <Separator />
 
                                     <div className="space-y-3 text-sm">
-                                        <div className="flex items-start gap-3">
-                                            <MapPin className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
-                                            <div>
-                                                <p className="text-muted-foreground text-xs">PICKUP</p>
-                                                <p>{trip.pickupLocation.address}</p>
+                                        {trip.pickupLocation?.address && (
+                                            <div className="flex items-start gap-3">
+                                                <MapPin className="w-4 h-4 text-green-500 mt-1 flex-shrink-0" />
+                                                <div>
+                                                    <p className="text-muted-foreground text-xs">PICKUP</p>
+                                                    <p>{trip.pickupLocation.address}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                         <div className="flex items-start gap-3">
-                                            <MapPin className="w-4 h-4 text-red-500 mt-1 flex-shrink-0" />
-                                            <div>
-                                                <p className="text-muted-foreground text-xs">DROP-OFF</p>
-                                                <p>{trip.destination.address}</p>
+                                        )}
+                                        {trip.destination?.address && (
+                                            <div className="flex items-start gap-3">
+                                                <MapPin className="w-4 h-4 text-red-500 mt-1 flex-shrink-0" />
+                                                <div>
+                                                    <p className="text-muted-foreground text-xs">DROP-OFF</p>
+                                                    <p>{trip.destination.address}</p>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
                                    
                                     <Separator />
@@ -139,8 +143,8 @@ export default function MyRidesPage() {
                         <Card>
                             <CardContent className="p-4 pt-4">
                                 <InfoItem icon={User} label="Customer" value={selectedTrip.customerName} />
-                                <InfoItem icon={MapPin} label="Pickup" value={selectedTrip.pickupLocation.address} />
-                                <InfoItem icon={MapPin} label="Destination" value={selectedTrip.destination.address} />
+                                {selectedTrip.pickupLocation?.address && <InfoItem icon={MapPin} label="Pickup" value={selectedTrip.pickupLocation.address} />}
+                                {selectedTrip.destination?.address && <InfoItem icon={MapPin} label="Destination" value={selectedTrip.destination.address} />}
                             </CardContent>
                         </Card>
                        
