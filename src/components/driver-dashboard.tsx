@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,22 +30,31 @@ function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 export default function DriverDashboard() {
-  const [acceptedTrip, setAcceptedTrip] = useState<Omit<BookingRequest, 'countdown'> | null>(null);
-  const [tripStage, setTripStage] = useState<TripStage | null>(null);
   const { toast } = useToast();
-  const { tripHistory, addTripToHistory, isAvailable, setIsAvailable, hasActiveTrip, setHasActiveTrip } = useTripContext();
+  const { 
+    tripHistory, 
+    addTripToHistory, 
+    isAvailable, 
+    setIsAvailable, 
+    hasActiveTrip, 
+    setHasActiveTrip,
+    activeTrip,
+    setActiveTrip,
+    tripStage,
+    setTripStage
+  } = useTripContext();
 
-  const { bookingRequest, clearBooking, driverLocation } = useBookingSimulation(isAvailable, !!acceptedTrip);
+  const { bookingRequest, clearBooking, driverLocation } = useBookingSimulation(isAvailable, !!activeTrip);
   
   useEffect(() => {
-    setHasActiveTrip(!!acceptedTrip);
-  }, [acceptedTrip, setHasActiveTrip]);
+    setHasActiveTrip(!!activeTrip);
+  }, [activeTrip, setHasActiveTrip]);
 
 
   const handleAccept = () => {
     if (bookingRequest) {
       const { countdown, ...tripData } = bookingRequest;
-      setAcceptedTrip(tripData);
+      setActiveTrip(tripData);
       setTripStage('DRIVING_TO_PICKUP');
       clearBooking();
     }
@@ -67,7 +76,7 @@ export default function DriverDashboard() {
   };
 
   const clearTripData = () => {
-    setAcceptedTrip(null);
+    setActiveTrip(null);
     setTripStage(null);
   };
 
@@ -81,12 +90,12 @@ export default function DriverDashboard() {
   };
 
   const completeTrip = () => {
-    if (acceptedTrip) {
+    if (activeTrip) {
       const completedTrip: Trip = {
-        ...acceptedTrip,
+        ...activeTrip,
         status: 'completed',
-        finalFare: acceptedTrip.fareEstimate,
-        tip: Math.floor(Math.random() * (acceptedTrip.fareEstimate * 0.25)),
+        finalFare: activeTrip.fareEstimate,
+        tip: Math.floor(Math.random() * (activeTrip.fareEstimate * 0.25)),
         timestamp: new Date().toISOString(),
       };
       addTripToHistory(completedTrip);
@@ -128,7 +137,7 @@ export default function DriverDashboard() {
           />
         )}
 
-        {acceptedTrip && tripStage === 'AWAITING_PIN' && (
+        {activeTrip && tripStage === 'AWAITING_PIN' && (
             <PinEntryDialog 
                 isOpen={tripStage === 'AWAITING_PIN'}
                 onPinVerified={handlePinVerified}
@@ -158,10 +167,10 @@ export default function DriverDashboard() {
             </CardContent>
         </Card>
         
-        {acceptedTrip && tripStage ? (
+        {activeTrip && tripStage ? (
              <div className="h-auto">
                 <TripInfo 
-                  trip={acceptedTrip} 
+                  trip={activeTrip} 
                   tripStage={tripStage}
                   onArrived={handleArrived}
                   onEndTrip={handleEndTrip} 

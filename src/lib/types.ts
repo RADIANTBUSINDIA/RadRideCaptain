@@ -1,4 +1,5 @@
 
+
 export interface Location {
   address: string;
   lat: number;
@@ -19,6 +20,8 @@ export interface BookingRequest {
   rideType: 'Standard' | 'Pool' | 'Rental';
   countdown: number;
 }
+
+export type ActiveTrip = Omit<BookingRequest, 'countdown'>;
 
 export interface Ride {
   id: string;

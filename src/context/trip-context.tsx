@@ -2,7 +2,8 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import type { Trip } from '@/lib/types';
+import type { Trip, ActiveTrip } from '@/lib/types';
+import type { TripStage } from '@/components/driver-dashboard';
 import { database } from '@/lib/firebase';
 import { ref, onValue, push, set } from 'firebase/database';
 
@@ -15,6 +16,10 @@ interface TripContextType {
   hasActiveTrip: boolean;
   setHasActiveTrip: (hasActiveTrip: boolean) => void;
   driverId: string | null;
+  activeTrip: ActiveTrip | null;
+  setActiveTrip: (trip: ActiveTrip | null) => void;
+  tripStage: TripStage | null;
+  setTripStage: (stage: TripStage | null) => void;
 }
 
 const TripContext = createContext<TripContextType | undefined>(undefined);
@@ -24,6 +29,9 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [hasActiveTrip, setHasActiveTrip] = useState(false);
   const [driverId, setDriverId] = useState<string | null>(null);
+  const [activeTrip, setActiveTripState] = useState<ActiveTrip | null>(null);
+  const [tripStage, setTripStageState] = useState<TripStage | null>(null);
+
 
   useEffect(() => {
     try {
@@ -34,10 +42,36 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
                 setDriverId(profile.id);
             }
         }
+        const storedActiveTrip = localStorage.getItem("activeTrip");
+        if (storedActiveTrip) {
+            setActiveTripState(JSON.parse(storedActiveTrip));
+        }
+        const storedTripStage = localStorage.getItem("tripStage");
+        if (storedTripStage) {
+            setTripStageState(storedTripStage as TripStage);
+        }
     } catch (e) {
-        console.error("Could not parse driver profile from local storage", e);
+        console.error("Could not parse data from local storage", e);
     }
   }, []);
+
+  const setActiveTrip = (trip: ActiveTrip | null) => {
+    setActiveTripState(trip);
+    if (trip) {
+        localStorage.setItem("activeTrip", JSON.stringify(trip));
+    } else {
+        localStorage.removeItem("activeTrip");
+    }
+  };
+
+  const setTripStage = (stage: TripStage | null) => {
+    setTripStageState(stage);
+    if (stage) {
+        localStorage.setItem("tripStage", stage);
+    } else {
+        localStorage.removeItem("tripStage");
+    }
+  };
 
   // Load trip history from Firebase Realtime Database
   useEffect(() => {
@@ -80,7 +114,11 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         setIsAvailable,
         hasActiveTrip,
         setHasActiveTrip,
-        driverId
+        driverId,
+        activeTrip,
+        setActiveTrip,
+        tripStage,
+        setTripStage
     }}>
       {children}
     </TripContext.Provider>
