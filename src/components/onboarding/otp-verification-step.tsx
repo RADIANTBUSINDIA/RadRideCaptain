@@ -31,6 +31,8 @@ export default function OtpVerificationStep({ onNext, onBack, updateFormData, ph
   const handleResendOtp = () => {
     // Simulate resending OTP
     setIsResending(true);
+    // In a real app, you would make an API call here.
+    console.log("Resending OTP to", phone);
     setTimeout(() => {
       setTimer(30);
       setIsResending(false);
@@ -38,6 +40,8 @@ export default function OtpVerificationStep({ onNext, onBack, updateFormData, ph
   };
   
   const handleVerify = () => {
+    // In a real app, you'd verify the OTP with a backend service.
+    // For this simulation, we'll just check if it's 4 digits.
     updateFormData({ otp });
     onNext();
   };
