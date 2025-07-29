@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { BookingRequest } from "@/lib/types";
+import type { BookingRequest, Location } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { User, MapPin, Navigation, Pin } from "lucide-react";
@@ -10,24 +10,28 @@ import type { TripStage } from "./driver-dashboard";
 interface TripInfoProps {
   trip: Omit<BookingRequest, 'countdown'>;
   tripStage: TripStage;
+  driverLocation: Location;
   onArrived: () => void;
   onEndTrip: () => void;
 }
 
-export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: TripInfoProps) {
+export default function TripInfo({ trip, tripStage, driverLocation, onArrived, onEndTrip }: TripInfoProps) {
 
   const handleNavigate = () => {
-    let lat, lng;
+    let destinationLat, destinationLng;
+    const origin = `${driverLocation.lat},${driverLocation.lng}`;
+    
     if (tripStage === 'DRIVING_TO_PICKUP') {
-      lat = trip.pickupLocation.lat;
-      lng = trip.pickupLocation.lng;
+      destinationLat = trip.pickupLocation.lat;
+      destinationLng = trip.pickupLocation.lng;
     } else if (tripStage === 'TRIP_IN_PROGRESS') {
-      lat = trip.destination.lat;
-      lng = trip.destination.lng;
+      destinationLat = trip.destination.lat;
+      destinationLng = trip.destination.lng;
     } else {
       return;
     }
-    const url = `google.navigation:q=${lat},${lng}`;
+    const destination = `${destinationLat},${destinationLng}`;
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
     window.open(url, '_blank');
   };
 
