@@ -27,7 +27,7 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
     } else {
       return;
     }
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    const url = `google.navigation:q=${lat},${lng}`;
     window.open(url, '_blank');
   };
 
