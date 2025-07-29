@@ -16,6 +16,21 @@ interface TripInfoProps {
 
 export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: TripInfoProps) {
 
+  const handleNavigate = () => {
+    let lat, lng;
+    if (tripStage === 'DRIVING_TO_PICKUP') {
+      lat = trip.pickupLocation.lat;
+      lng = trip.pickupLocation.lng;
+    } else if (tripStage === 'TRIP_IN_PROGRESS') {
+      lat = trip.destination.lat;
+      lng = trip.destination.lng;
+    } else {
+      return;
+    }
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(url, '_blank');
+  };
+
   const renderCardTitle = () => {
       switch (tripStage) {
           case 'DRIVING_TO_PICKUP':
@@ -68,11 +83,11 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
                 <CardDescription>{renderCardDescription()}</CardDescription>
             </div>
             {tripStage !== 'AWAITING_PIN' && (
-              <Button asChild variant="outline" size="icon" disabled>
-                  <div>
+              <Button asChild variant="outline" size="icon" onClick={handleNavigate}>
+                  <a target="_blank" rel="noopener noreferrer">
                       <Navigation className="h-4 w-4" />
                       <span className="sr-only">Navigate</span>
-                  </div>
+                  </a>
               </Button>
             )}
         </div>
