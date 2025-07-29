@@ -50,7 +50,7 @@ export default function OnboardingPage() {
   const registrationSteps = 7;
   const loginSteps = 3;
   const totalSteps = isExistingUser ? loginSteps : registrationSteps;
-  const currentStepNumber = isExistingUser && step > 2 ? step - 1 : step -1;
+  const currentStepNumber = isExistingUser && step > 2 ? step - 1 : step;
   const progressValue = (currentStepNumber / totalSteps) * 100;
 
   const renderStep = () => {
@@ -127,10 +127,10 @@ export default function OnboardingPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-2xl">
-        {step < totalSteps + 1 && step > 1 && (
+        {step < 8 && step > 1 && (
           <div className="mb-8">
              <h2 className="text-center text-sm font-semibold text-primary mb-2">
-                {isExistingUser ? `Login: Step ${currentStepNumber} of ${totalSteps}` : `Registration: Step ${currentStepNumber} of ${totalSteps}`}
+                {isExistingUser ? `Login: Step ${currentStepNumber-1} of ${totalSteps-1}` : `Registration: Step ${currentStepNumber} of ${totalSteps}`}
             </h2>
             <Progress value={progressValue} className="w-full" />
           </div>
