@@ -26,7 +26,7 @@ const TripContext = createContext<TripContextType | undefined>(undefined);
 
 export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [tripHistory, setTripHistory] = useState<Trip[]>([]);
-  const [isAvailable, setIsAvailable] = useState(false);
+  const [isAvailable, setIsAvailableState] = useState(false);
   const [hasActiveTrip, setHasActiveTrip] = useState(false);
   const [driverId, setDriverId] = useState<string | null>(null);
   const [activeTrip, setActiveTripState] = useState<ActiveTrip | null>(null);
@@ -50,6 +50,11 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         if (storedTripStage) {
             setTripStageState(storedTripStage as TripStage);
         }
+        const storedIsAvailable = localStorage.getItem("isAvailable");
+        if (storedIsAvailable) {
+            setIsAvailableState(JSON.parse(storedIsAvailable));
+        }
+
     } catch (e) {
         console.error("Could not parse data from local storage", e);
     }
@@ -72,6 +77,11 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem("tripStage");
     }
   };
+
+  const setIsAvailable = (available: boolean) => {
+    setIsAvailableState(available);
+    localStorage.setItem("isAvailable", JSON.stringify(available));
+  }
 
   // Load trip history from Firebase Realtime Database
   useEffect(() => {
