@@ -83,11 +83,9 @@ export default function TripInfo({ trip, tripStage, onArrived, onEndTrip }: Trip
                 <CardDescription>{renderCardDescription()}</CardDescription>
             </div>
             {tripStage !== 'AWAITING_PIN' && (
-              <Button asChild variant="outline" size="icon" onClick={handleNavigate}>
-                  <a target="_blank" rel="noopener noreferrer">
-                      <Navigation className="h-4 w-4" />
-                      <span className="sr-only">Navigate</span>
-                  </a>
+              <Button variant="outline" size="icon" onClick={handleNavigate}>
+                  <Navigation className="h-4 w-4" />
+                  <span className="sr-only">Navigate</span>
               </Button>
             )}
         </div>
